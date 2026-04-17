@@ -42,78 +42,63 @@
 
 **Works with any C++ project — Game Engines, Emulators, Desktop Apps, and more**
 
-[Features](#-features) • [Examples](#-examples) • [Installation](#-installation--submodules) • [Tests](#-tests) • [Integration](#-integration) • [Architecture](#-architecture) • [Contributing](#-contributing)
+[Features](#-features) • [Examples](#-implementations--integrations) • [Installation](#-installation--submodules) • [Tests](#-tests) • [Integration](#minimal-example-standalone-c) • [Architecture](#-architecture) • [Contributing](#-contributing)
 
 </div>
 
-## 🎮 Release > v0.0.10
+---
 
-> [!IMPORTANT]
-> **API Change:** The `BufferOutput` attribute in the `FDeviceContext` struct is now **private**.
-> To access the write buffer, use the new method: `Context->GetRawOutputBuffer()`.
-
-> [!IMPORTANT]
-> **After calling any effect event on the controller (lights, triggers, vibrations, etc.), it is always necessary to call `Gamepad->UpdateOutput()` to apply the changes.**
-
-## 🚀 What is Gamepad-Core? 
+### 🚀 What is Gamepad-Core? 
 
 **Gamepad-Core** is a high-performance, policy-based C++ library that unlocks the **full potential** of Sony's DualSense and DualShock 4 controllers through direct HID communication. 
 
-Unlike generic gamepad APIs (XInput, SDL, etc.), Gamepad-Core gives you **raw, low-level access** to advanced hardware features that standard drivers can't touch: 
-
-- 🎯 **Adaptive Triggers** — Dynamic resistance and haptic feedback on L2/R2
-- 💡 **RGB Lightbar** — Full LED control with per-device customization
-- 🎧 **Audio Haptics** — Convert game audio into tactile feedback (USB & Wireless)
-- ⚡ **High-Frequency Rumble** — Precise motor control for immersive vibration
-- 🔄 **Hot-Swap Detection** — Real-time plug-and-play support
-- 🎮 **Multi-Device** — Handle up to 4 controllers simultaneously
-- 🎚️ **Factory Calibration** — Automatic calibration on connection, no setup required
-- 🎤 **Smart Mute Detection** — Automatic mute LED control, no coding required
+Unlike generic gamepad APIs (XInput, SDL, etc.), Gamepad-Core gives you **raw, low-level access** to advanced hardware features that standard drivers can't touch.
 
 ### 🌍 True Cross-Platform Architecture
 
-Gamepad-Core is **engine-agnostic by design**.  It's a pure C++ library that works anywhere C++20 is supported: 
+Gamepad-Core is **engine-agnostic by design**. It is a pure C++ library that works anywhere C++20 is supported. 
 
-
-### 🧱 Policy-Based Architecture
 The library leverages **policy-based design** to abstract platform-specific details. This zero-cost abstraction makes it trivial to extend support to new platforms or custom hardware without touching the core logic.
 
 ---
 
 ## ✨ Features
 
-### 🎮 Advanced Hardware Control
-Unlock the full potential of the DualSense controller with direct access to hardware features.
-
-* **Adaptive Triggers:** Full control over resistance profiles including Feedback, Weapon, Bow, Galloping, and raw HEX commands.
-* **Audio-to-Haptic:** Process real-time audio buffers and convert them into high-fidelity haptic feedback (USB & Bluetooth).
-* **RGB & LEDs:** Programmatic control over the Lightbar, player indicator LEDs, and microphone mute status.
-* **IMU Sensors:** Access raw Gyroscope & Accelerometer data for motion controls and precision aiming.
-* **Power Management:** Query battery level, charging status, and connection type.
-
-### ⚡ Performance & Reliability
-Built for high-performance engines where every millisecond counts.
-
-* **Zero-Allocation Hot Loop:** No memory allocation during the update loop to prevent GC spikes or latency.
-* **Non-Blocking I/O:** Asynchronous device discovery and state updates.
-* **Thread-Safe:** Designed from the ground up for multi-threaded game engines.
-* **Plug-and-Play:** Hot-swap support with automatic device detection and reconnection.
-
-### 🛠️ Developer Experience
-* **Modern C++20:** Built with concepts, templates, and smart pointers for type safety.
-* **Extensible:** Implement simple platform policies to add new support.
-* **Test Suite:** Includes a standalone integration test target (CMake) to verify features on physical hardware.
-* **MIT Licensed:** Free for commercial and open-source use.
----
-
-**Gamepad-Core** is production-ready and currently powers projects used by the gaming community, from high-end Game Engines to low-power Microcontrollers.
+* **🏗️ Extensible Multi-Platform Architecture**
+    Engine-agnostic C++20 design. Supporting new hardware is as simple as implementing the core connection interface, making it suitable for any environment—from PC to embedded systems.
+* **🔌 Dynamic Connection (Hot-Swap)**
+    Robust plug-and-play logic that automatically detects controller connection and disconnection in real-time.
+* **⚡ High-Performance & Low-Latency**
+    Optimized for minimal CPU overhead and memory footprint, ensuring zero impact on the main application loop.
+* **🎮 Transparent Integration**
+    Designed to coexist with existing system input managers without device conflicts or driver interference.
+* **🎧 Audio Haptics**
+    Advanced haptic feedback driven by real-time audio data (via USB and Wireless).
+* **🎯 Adaptive Triggers**
+    Precise low-level control over resistance, haptic effects, and vibration for R2/L2 triggers.
+* **💡 Lightbar & LED Control**
+    Programmatic control over the controller's LED colors and player indicators.
+* **🎤 Smart Mute Logic**
+    Automatic handling of the microphone mute LED state based on device status.
+* **🎮 Multi-Controller Support**
+    Native support for DualSense (Standard/Edge) and DualShock 4. The model-agnostic architecture is prepared for legacy hardware expansion, such as PS1 and PS2 models.
 
 ---
-## 🍓 Raspberry Pi Pico W — Microcontroller Integration
 
+## 🏆 Implementations & Integrations
+
+### 1. Unreal Engine — Primary Integration
+**[Unreal-Dualsense](https://github.com/rafaelvaloto/Unreal-Dualsense) (v2.0.3)**
+
+The flagship plugin bringing native DualSense support to UE5 via Blueprint and C++.
+* ✅ Live Adaptive Trigger prototyping via Data Tables.
+* ✅ Real-time Audio-to-Haptics submix processing.
+* ✅ Native Input System integration for Force Feedback & Motion.
+
+### 2. Raspberry Pico W — Microcontroller Integration
 Demonstrating the extreme portability and architectural efficiency of the library, the same core logic used in AAA game engines runs perfectly on a **Pico W (264KB RAM / 2MB Flash)**.
 
-### 🎥 [Click and watch the example video on YouTube.](https://www.youtube.com/watch?v=GgKDtwfS6v4)
+**[🎥 Watch the example video on YouTube](https://www.youtube.com/watch?v=GgKDtwfS6v4)**
 
 The Pico W implementation includes **complete support** for all advanced DualSense capabilities:
 
@@ -124,43 +109,16 @@ The Pico W implementation includes **complete support** for all advanced DualSen
 | **System:** Battery & Charging status | **RGB Lightbar:** Full color & Player LED control |
 | **Standard:** All 17 buttons + Analog sticks | **Architecture:** Production-ready C++20 |
 
-**[👉 Check out the Pico W implementation](https://github.com/rafaelvaloto/Pico_W-Dualsense)**
+*The Pico W implementation uses the exact same C++ core files as the Unreal and O3DE integrations, with zero logic changes.*
 
-The Pico W implementation uses the exact same C++ core files as the Unreal and O3DE integrations, with zero logic changes.
+[👉 Check out the Pico W implementation](https://github.com/rafaelvaloto/Pico_W-Dualsense)
 
----
 
-## 🏆 Unreal Engine — Primary Integration
-**[Unreal-Dualsense](https://github.com/rafaelvaloto/Unreal-Dualsense)** (v2.0.3)
+### 3. Other Prototypes & Mods
 
-The flagship plugin bringing native DualSense support to UE5 via Blueprint and C++.
-* ✅ Live Adaptive Trigger prototyping via Data Tables.
-* ✅ Real-time Audio-to-Haptics submix processing.
-* ✅ Native Input System integration for Force Feedback & Motion.
-
----
-##  ⚙️ O3DE (Open 3D Engine) — Gem Integration
-
-**[O3DE-Dualsense](https://github.com/rafaelvaloto/o3de-dualsense)** (O3DE Gem)
-
-A native O3DE Gem that brings DualSense and DualShock 4 support to the Open 3D Engine. Demonstrates Gamepad-Core's flexibility with O3DE's modular Gem architecture.
-
-**Features:**
-- ✅ Full adaptive trigger support
-- ✅ RGB lightbar and player LED control
-- ✅ Haptic feedback integration
-- ✅ Native O3DE EBus system integration
-- ✅ Blueprint-compatible scripting bindings
-
----
-
-A prototype demonstrating Gamepad-Core's portability through native GDExtension bindings.  Shows how the library can be wrapped for any scripting environment.
-
-**[👉 Godot-Dualsense  (GDExtension for Godot 4.x)](https://github.com/rafaelvaloto/Godot-Dualsense)**
-
-A specialized implementation tailored for *Session: Skate Sim*, demonstrating the library's ability to enhance gameplay physics.
-
-**[👉 Start by cloning the Session Mod Repo](https://github.com/rafaelvaloto/Gaming-Mods-Dualsense)**
+* **[O3DE-Dualsense](https://github.com/rafaelvaloto/o3de-dualsense)** — O3DE Gem integration.
+* **[Godot-Dualsense](https://github.com/rafaelvaloto/Godot-Dualsense)** — GDExtension for Godot 4.x.
+* **[Mod Audio Haptics](https://github.com/rafaelvaloto/Gaming-Mods-Dualsense)** — Session Skate Sim mod.
 
 ---
 
@@ -327,9 +285,8 @@ Special thanks to **Epidemic Sound** for providing high-quality royalty-free mus
 
 ---
 
-## 💻 Integration
 
-### Minimal Example (Standalone C++)
+## Minimal Example (Standalone C++)
 
 ```cpp
 #include "GCore/Templates/TBasicDeviceRegistry.h"
@@ -413,49 +370,13 @@ int main() {
         std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 }
-```
 
-### Platform Policy Structure
-
-Gamepad-Core uses **policies** to abstract OS-specific code:
-
-```cpp
-struct MyCustomHardwarePolicy {
-      	void Read(FDeviceContext* Context)
-		{
-			test_windows_platform::test_windows_device_info::Read(Context);
-		}
-
-		void Write(FDeviceContext* Context)
-		{
-		}
-
-		void Detect(std::vector<FDeviceContext>& Devices)
-		{
-		}
-
-		bool CreateHandle(FDeviceContext* Context)
-		{
-		}
-
-		void InvalidateHandle(FDeviceContext* Context)
-		{
-		}
-
-		void ProcessAudioHaptic(FDeviceContext* Context)
-		{
-		}
-
-		void InitializeAudioDevice (FDeviceContext* Context)
-		{
-		}
-};
 ```
 
 This design makes it trivial to support **custom platforms** (e.g., PlayStation SDK, proprietary embedded systems) without touching core logic.
 
 
-## 🏗️ Architecture
+## 🧩 Architecture
 
 Gamepad-Core follows **strict separation of concerns** to ensure portability and extensibility:
 
@@ -555,8 +476,6 @@ Tells the library **how** to discover and communicate with devices on your platf
 
 ---
 
-## 🧪 Building from Source
-
 ### Prerequisites
 
 - **CMake** 3.20 or higher
@@ -601,16 +520,6 @@ Feel free to open an **Issue** or submit a **Pull Request**.
 
 ---
 
-## 📄 License
-
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-
-This project is licensed under the **MIT License**. See the `LICENSE` file for details.
-
-Copyright (c) 2025 **Rafael Valoto**
-
----
-
 ## ⭐ Credits and Acknowledgments
 
 The foundation of this plugin was built upon the research and code from several amazing projects in the community:
@@ -628,6 +537,14 @@ Special thanks to the community members who helped improve this plugin:
 
 * **[yncat](https://github.com/yncat)**: For the extensive research and implementation logic regarding **USB Audio Haptics**, which was crucial for supporting high-fidelity haptics via USB ([Issue #105](https://github.com/rafaelvaloto/Unreal-Dualsense/issues/105)).
 
+
+---
+
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
+
+Copyright (c) 2025 **Rafael Valoto**
 
 ## ⚖️ Legal & Trademarks
 
