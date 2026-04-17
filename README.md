@@ -48,15 +48,15 @@
 
 ---
 
-### 🚀 What is Gamepad-Core? 
+### 🚀 What is Dualsense-Multiplatform?
 
-**Gamepad-Core** is a high-performance, policy-based C++ library that unlocks the **full potential** of Sony's DualSense and DualShock 4 controllers through direct HID communication. 
+**Dualsense-Multiplatform** is a high-performance, policy-based C++ library that unlocks the **full potential** of Sony's DualSense and DualShock 4 controllers through direct HID communication. 
 
 Unlike generic gamepad APIs (XInput, SDL, etc.), Gamepad-Core gives you **raw, low-level access** to advanced hardware features that standard drivers can't touch.
 
 ### 🌍 True Cross-Platform Architecture
 
-Gamepad-Core is **engine-agnostic by design**. It is a pure C++ library that works anywhere C++20 is supported. 
+Dualsense-Multiplatform is **engine-agnostic by design**. It is a pure C++ library that works anywhere C++20 is supported. 
 
 The library leverages **policy-based design** to abstract platform-specific details. This zero-cost abstraction makes it trivial to extend support to new platforms or custom hardware without touching the core logic.
 
