@@ -540,12 +540,6 @@ Special thanks to the community members who helped improve this plugin:
 
 ---
 
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-
-This project is licensed under the **MIT License**. See the `LICENSE` file for details.
-
-Copyright (c) 2025 **Rafael Valoto**
-
 ## ⚖️ Legal & Trademarks
 
 This software is an **independent project** and is **not affiliated** with Sony Interactive Entertainment Inc., Epic Games, Unity Technologies, Godot Engine, or any of their subsidiaries.
@@ -564,5 +558,13 @@ This software is an **independent project** and is **not affiliated** with Sony 
 <div align="center">
 
 [⬆ Back to Top](#-gamepad-core)
+
+
+<br>
+
+
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
+
+Copyright (c) 2025 **Rafael Valoto**
 
 </div>
