@@ -557,8 +557,7 @@ This software is an **independent project** and is **not affiliated** with Sony 
 
 <div align="center">
 
-[⬆ Back to Top](#-gamepad-core)
-
+[⬆ Back to Top](#-what-is-dualsense-multiplatform)
 
 <br>
 
