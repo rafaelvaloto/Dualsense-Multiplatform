@@ -3,12 +3,13 @@
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
 #pragma once
-#include "GCore/Interfaces/Segregations/IGamepadAudioHaptics.h"
+#include "GCore/Interfaces/Segregations/IGamepadHaptics.h"
+#include "GCore/Interfaces/Segregations/IGamepadSettings.h"
 #include "GCore/Interfaces/Segregations/IGamepadTrigger.h"
 #include "GCore/Types/DSCoreTypes.h"
 #include "GCore/Types/ECoreGamepad.h"
 #include "GCore/Types/Structs/Context/DeviceContext.h"
-#include "GImplementations/Libraries/Base/SonyGamepadAbstract.h"
+#include "GImplementations/Libraries/Base/GamepadBase.h"
 
 /**
  * @class FDualSenseLibrary
@@ -33,9 +34,14 @@
  * The library is designed for developers seeking to leverage unique features of
  * the DualSense controller programmatically within an application.
  */
-class FDualSenseLibrary : public SonyGamepadAbstract,
+class FDualSenseLibrary : public GamepadBase,
+                          public IGamepadRumbles,
+                          public IGamepadLightbar,
+                          public IGamepadSensors,
+                          public IGamepadTouch,
                           public IGamepadTrigger,
-                          public IGamepadAudioHaptics
+                          public IGamepadHaptics,
+                          public IGamepadSettings
 {
 
 public:
@@ -53,18 +59,58 @@ public:
 	 * @return A pointer to the IGamepadTrigger implementing object, typically
 	 * this instance.
 	 */
-	virtual IGamepadTrigger* GetIGamepadTrigger() override { return this; }
+	IGamepadTrigger* GetIGamepadTrigger() override { return this; }
 
 	/**
 	 * @brief Retrieves the interface for handling gamepad audio haptics.
 	 *
 	 * This method returns a pointer to an object that implements the
-	 * IGamepadAudioHaptics interface, which provides functionalities related to
+	 * IGamepadHaptics interface, which provides functionalities related to
 	 * the audio haptics of a gamepad.
 	 *
 	 * @return A pointer to the IGamepadAudioHaptics instance.
 	 */
-	virtual IGamepadAudioHaptics* GetIGamepadHaptics() override { return this; }
+	IGamepadHaptics* GetIGamepadHaptics() override { return this; }
+	/**
+	 * @brief Retrieves the interface for controlling the gamepad's lightbar.
+	 *
+	 * This method returns a pointer to the object implementing the IGamepadLightbar
+	 * interface. It enables interaction with the lightbar functionality of the
+	 * gamepad, allowing for customization of lightbar behavior, such as changing
+	 * colors or responding to game states.
+	 *
+	 * @return A pointer to the IGamepadLightbar interface implementation of this object.
+	 */
+	IGamepadLightbar* GetIGamepadLightbar() override { return this; }
+	/**
+	 * @brief Retrieves the gamepad rumble interface for the current object.
+	 *
+	 * This method returns a pointer to the IGamepadRumbles interface, allowing access
+	 * to functionalities related to managing gamepad rumble effects.
+	 *
+	 * @return A pointer to the IGamepadRumbles interface implemented by this object.
+	 */
+	IGamepadRumbles* GetIGamepadRumbles() override { return this; }
+	/**
+	 * @brief Retrieves the gamepad sensor interface for the current instance.
+	 *
+	 * This method provides access to the gamepad sensor functionalities available
+	 * in the current object. It is typically used to obtain an interface that allows
+	 * interaction with various gamepad sensors such as accelerometers, gyroscopes,
+	 * or other relevant input data.
+	 *
+	 * @return An interface pointer to the gamepad sensors for this instance.
+	 */
+	IGamepadSensors* GetIGamepadSensors() override { return this; }
+	/**
+	 * @brief Retrieves the interface for handling touch input on the gamepad.
+	 *
+	 * This method overrides a base class implementation to return a pointer to the
+	 * current instance, providing access to gamepad touch input functionality.
+	 *
+	 * @return A pointer to the IGamepadTouch interface for managing touch input.
+	 */
+	IGamepadTouch* GetIGamepadTouch() override { return this; }
 
 	/**
 	 * @brief Configures settings for the PlayStation DualSense controller.
@@ -83,7 +129,7 @@ public:
 	 * @param RumbleReduce Reduces the intensity of the rumble effect (value range is implementation-specific).
 	 * @param TriggerReduce Adjusts the sensitivity of the adaptive triggers (value range is implementation-specific).
 	 */
-	virtual void DualSenseSettings(std::uint8_t bIsMic, std::uint8_t bIsHeadset, std::uint8_t bIsSpeaker, std::uint8_t MicVolume, std::uint8_t AudioVolume, std::uint8_t RumbleMode, std::uint8_t RumbleReduce, std::uint8_t TriggerReduce) override;
+	void DualSenseSettings(std::uint8_t bIsMic, std::uint8_t bIsHeadset, std::uint8_t bIsSpeaker, std::uint8_t MicVolume, std::uint8_t AudioVolume, std::uint8_t RumbleMode, std::uint8_t RumbleReduce, std::uint8_t TriggerReduce) override;
 
 	/**
 	 * @brief Updates the output state of the gamepad.
@@ -97,7 +143,7 @@ public:
 	 * haptic feedback, audio output, or other gamepad output features based on
 	 * the current state or input from the system.
 	 */
-	virtual void UpdateOutput() override;
+	void UpdateOutput() override;
 	/**
 	 * @brief Initializes the DualSense library with the specified device context.
 	 *
@@ -112,7 +158,7 @@ public:
 	 *
 	 * @return Returns true if the library was successfully initialized.
 	 */
-	virtual bool Initialize(const FDeviceContext& Context) override;
+	bool Initialize(const FDeviceContext& Context) override;
 	/**
 	 * @brief Updates the input state for a DualSense device.
 	 *
@@ -122,7 +168,7 @@ public:
 	 * specified platform user and input device.
 	 * @return A boolean value indicating whether the input update was successful.
 	 */
-	virtual void UpdateInput(float /*Delta*/) override;
+	void UpdateInput(float /*Delta*/) override;
 	/**
 	 * Stops any ongoing adaptive trigger effects on the specified controller
 	 * hand.
@@ -131,7 +177,7 @@ public:
 	 *             Acceptable values are EDSGamepadHand::Left,
 	 * EDSGamepadHand::Right, or EDSGamepadHand::AnyHand.
 	 */
-	virtual void StopTrigger(const EDSGamepadHand& Hand) override;
+	void StopTrigger(const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Configures the trigger settings on a DualSense controller for
 	 * GameCube-style behavior.
@@ -144,7 +190,7 @@ public:
 	 * side where the GameCube-style trigger behavior should be applied. Must be
 	 * a value of the EDSGamepadHand enumeration.
 	 */
-	virtual void SetGameCube(const EDSGamepadHand& Hand) override;
+	void SetGameCube(const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Sets the trigger resistance properties for a specific controller
 	 * hand.
@@ -161,8 +207,7 @@ public:
 	 * @param Hand Indicates the controller hand (e.g., left or right) where the
 	 * resistance should be configured.
 	 */
-	virtual void SetResistance(std::uint8_t StartZones, std::uint8_t Strength,
-	                           const EDSGamepadHand& Hand) override;
+	void SetResistance(std::uint8_t StartZones, std::uint8_t Strength, const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Configures the bow effect settings on a DualSense controller.
 	 *
@@ -174,8 +219,7 @@ public:
 	 * @param Hand The controller hand (left or right) associated with the bow
 	 * action.
 	 */
-	virtual void SetBow22(std::uint8_t StartZone, std::uint8_t SnapBack,
-	                      const EDSGamepadHand& Hand) override;
+	void SetBow22(std::uint8_t StartZone, std::uint8_t SnapBack, const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Configures the galloping trigger feedback behavior on a DualSense
 	 * controller.
@@ -198,7 +242,7 @@ public:
 	 * @param Hand Specifies the controller hand (left, right, or any) to apply
 	 * the galloping effect.
 	 */
-	virtual void SetGalloping23(std::uint8_t StartPosition,
+	void SetGalloping23(std::uint8_t StartPosition,
 	                            std::uint8_t EndPosition, std::uint8_t FirstFoot,
 	                            std::uint8_t SecondFoot, std::uint8_t Frequency,
 	                            const EDSGamepadHand& Hand) override;
@@ -220,7 +264,7 @@ public:
 	 * @param Hand Determines which hand (Left, Right, or AnyHand) the
 	 * configuration applies to.
 	 */
-	virtual void SetWeapon25(std::uint8_t StartZone, std::uint8_t Amplitude,
+	void SetWeapon25(std::uint8_t StartZone, std::uint8_t Amplitude,
 	                         std::uint8_t Behavior, std::uint8_t Trigger,
 	                         const EDSGamepadHand& Hand) override;
 	/**
@@ -246,7 +290,7 @@ public:
 	 * @param Hand Indicates which controller hand (left or right) will receive
 	 * the effect.
 	 */
-	virtual void SetMachineGun26(std::uint8_t StartZone, std::uint8_t Behavior,
+	void SetMachineGun26(std::uint8_t StartZone, std::uint8_t Behavior,
 	                             std::uint8_t Amplitude, std::uint8_t Frequency,
 	                             const EDSGamepadHand& Hand) override;
 	/**
@@ -274,7 +318,7 @@ public:
 	 * @param Hand Identifies the controller hand (left, right, or both) for
 	 * applying the trigger effect.
 	 */
-	virtual void SetMachine27(std::uint8_t StartZone, std::uint8_t BehaviorFlag,
+	void SetMachine27(std::uint8_t StartZone, std::uint8_t BehaviorFlag,
 	                          std::uint8_t Force, std::uint8_t Amplitude,
 	                          std::uint8_t Period, std::uint8_t Frequency,
 	                          const EDSGamepadHand& Hand) override;
@@ -292,9 +336,7 @@ public:
 	 * @param HexBytes An array of hexadecimal byte strings defining the custom
 	 * trigger configuration. Must contain exactly 10 valid values.
 	 */
-	virtual void
-	SetCustomTrigger(const EDSGamepadHand& Hand,
-	                 const std::vector<std::uint8_t>& HexBytes) override;
+	void SetCustomTrigger(const EDSGamepadHand& Hand, const std::vector<std::uint8_t>& HexBytes) override;
 
 	/**
 	 * Sets the LED player indicator effects based on the desired player LED
@@ -305,7 +347,7 @@ public:
 	 * @param Brightness The brightness intensity for the LED, represented by the
 	 * ELedBrightnessEnum enumeration.
 	 */
-	virtual void SetPlayerLed(EDSPlayer Led, std::uint8_t Brightness) override;
+	void SetPlayerLed(EDSPlayer Led, std::uint8_t Brightness) override;
 	/**
 	 * Sets the microphone LED effects on the DualSense controller.
 	 *
@@ -313,7 +355,7 @@ public:
 	 * by the ELedMicEnum enumeration, which includes options such as MicOff,
 	 * MicOn, and Pulse.
 	 */
-	virtual void SetMicrophoneLed(EDSMic Led) override;
+	void SetMicrophoneLed(EDSMic Led) override;
 	/**
 	 * @brief Sets the vibration strength for the DualSense controller.
 	 *
@@ -326,8 +368,7 @@ public:
 	 * @param RightRumble The intensity of the right motor's vibration (0-255).
 	 * Optional, defaults to 0.
 	 */
-	virtual void SetVibration(std::uint8_t LeftRumble = 0,
-	                          std::uint8_t RightRumble = 0) override;
+	void SetVibration(std::uint8_t LeftRumble, std::uint8_t RightRumble) override;
 	/**
 	 * @brief Stops all ongoing input and feedback operations on the DualSense
 	 * controller.
@@ -349,7 +390,7 @@ public:
 	 * where the controller must be brought into a neutral state, such as when
 	 * pausing gameplay or shutting down the system.
 	 */
-	virtual void ResetLights() override;
+	void ResetLights() override;
 	/**
 	 * @brief Sets the lightbar color and updates its behavior on a DualSense
 	 * controller.
@@ -361,8 +402,8 @@ public:
 	 *
 	 * @param Color The desired color of the lightbar, represented as an FDSColor
 	 */
-	virtual void SetLightbar(DSCoreTypes::FDSColor Color) override;
-	virtual void SetLightbarFlash(DSCoreTypes::FDSColor /*Color*/, float /*BrithnessTime*/, float /*ToggleTime*/) override {}
+	void SetLightbar(DSCoreTypes::FDSColor Color) override;
+	void SetLightbarFlash(DSCoreTypes::FDSColor Color, float BrightnessTime, float ToggleTime) override;
 	/**
 	 * @brief Updates the haptic feedback system of the DualSense controller with
 	 * audio data.
@@ -384,8 +425,29 @@ public:
 	 * immersive feedback during audio playback or gaming scenarios that utilize
 	 * DualSense controllers.
 	 */
-	virtual void AudioHapticUpdate(const std::vector<std::uint8_t>& Data) override;
-	virtual void AudioHapticUpdate(const std::vector<std::int16_t>& AudioData) override;
+	void AudioHapticUpdate(const std::vector<std::uint8_t>& Data) override;
+	/**
+	 * @brief Updates the haptic feedback of the DualSense controller based on provided audio data.
+	 *
+	 * This method processes audio sample data to trigger haptic feedback effects
+	 * on a connected DualSense controller. It works by writing the given audio data
+	 * to the device's haptic feedback system, allowing synchronization of tactile
+	 * sensations with audio output.
+	 *
+	 * @param AudioData A vector containing audio sample data represented as 16-bit
+	 * signed integers. These samples will be used to generate haptic feedback on
+	 * the DualSense controller.
+	 */
+	void AudioHapticUpdate(const std::vector<std::int16_t>& AudioData) override;
+	void SendLegacyBTReport(const std::vector<std::int16_t>& AudioData) override {}
+
+	// IGamepadSensors implementation
+	void ResetGyroOrientation() override {}
+	void EnableMotionSensor(bool) override {}
+
+	// IGamepadTouch implementation
+	void EnableTouch(bool) override {}
+	void EnableGesture(bool) override {}
 
 private:
 	/**

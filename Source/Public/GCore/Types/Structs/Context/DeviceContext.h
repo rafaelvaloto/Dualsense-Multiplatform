@@ -6,7 +6,7 @@
 #include "../../DSCoreTypes.h"
 #include "../../ECoreGamepad.h"
 #include "../Config/GamepadCalibration.h"
-#include "AudioContext.h"
+//#include "AudioContext.h"
 #include "InputContext.h"
 #include "OutputContext.h"
 #include "GCore/Utils/SoDefines.h"
@@ -45,17 +45,6 @@ struct FDeviceContext
 	 * instance, it may hold `INVALID_HANDLE_VALUE` when invalid or disconnected.
 	 */
 	FPlatformDeviceHandle Handle{};
-	/**
-	 * @brief Manages the state and operations related to an audio device.
-	 *
-	 * This shared pointer points to an object that encapsulates the context
-	 * and configuration of an audio device. It includes necessary resources
-	 * for handling audio streams and ensures controlled access and proper
-	 * lifecycle management of the associated audio device context.
-	 *
-	 * Used for facilitating audio-related functionality in the system.
-	 */
-	std::shared_ptr<FAudioDeviceContext> AudioContext;
 	/**
 	 * @brief Represents a file or resource path in the context of device
 	 * management.

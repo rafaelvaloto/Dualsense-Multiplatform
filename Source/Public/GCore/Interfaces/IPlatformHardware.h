@@ -23,10 +23,10 @@
  * or invalidation. Additionally, it provides a mechanism for accessing a
  * singleton instance for the platform-specific implementation of the interface.
  */
-class IPlatformHardwareInfo
+class IPlatformHardware
 {
 	/**
-	 * Provides access to the singleton instance of the IPlatformHardwareInfo.
+	 * Provides access to the singleton instance of the IPlatformHardware.
 	 *
 	 * This method returns a reference to the singleton instance of the
 	 * platform-specific hardware interface. If the instance does not exist, it is
@@ -44,11 +44,11 @@ class IPlatformHardwareInfo
 	 * pointer).
 	 */
 public:
-	static IPlatformHardwareInfo& Get();
+	static IPlatformHardware& Get();
 	/**
 	 * Sets the singleton instance of the platform-specific hardware information manager.
 	 *
-	 * This method allows assigning a custom implementation of the IPlatformHardwareInfo
+	 * This method allows assigning a custom implementation of the IPlatformHardware
 	 * interface to act as the global instance for managing platform-specific hardware
 	 * operations. It replaces any previously set instance with the provided one.
 	 *
@@ -56,7 +56,7 @@ public:
 	 *                 that will serve as the global platform hardware manager instance.
 	 *                 Ownership of the instance is transferred to the class.
 	 */
-	static void SetInstance(std::unique_ptr<IPlatformHardwareInfo> InPlatform);
+	static void SetInstance(std::unique_ptr<IPlatformHardware> InPlatform);
 	/**
 	 * Virtual destructor for the IIPlatformHardwareInfo.
 	 *
@@ -68,7 +68,7 @@ public:
 	 * @note The default implementation of the destructor is empty, as specific
 	 *       cleanup should be handled in the derived implementations.
 	 */
-	virtual ~IPlatformHardwareInfo() = default;
+	virtual ~IPlatformHardware() = default;
 	/**
 	 * Reads data from the hardware device using the provided context.
 	 *
@@ -155,7 +155,21 @@ public:
 	 * @param Context Pointer to the device context used to process audio haptic
 	 * feedback.
 	 */
+	virtual void ProcessAudioHaptic(FDeviceContext* Context, const std::vector<std::int16_t>& AudioData) = 0;
 	virtual void InitializeAudioDevice(FDeviceContext* Context) = 0;
+	/**
+	 * @brief Retrieves the library instance for the specified device ID.
+	 *
+	 * @param EngineDeviceId The unique identifier for the device within the engine's registry.
+	 * @return A pointer to the IGamepadBase instance for the device, or nullptr if not found.
+	 */
+	virtual class IGamepadBase* GetLibrary(uint32_t EngineDeviceId) = 0;
+	/**
+	 * @brief Sets the device registry for the hardware.
+	 *
+	 * @param InRegistry A pointer to the IDeviceRegistry instance.
+	 */
+	virtual void SetRegistry(class IDeviceRegistry* InRegistry) = 0;
 	/**
 	 * Default constructor for the IIPlatformHardwareInfo.
 	 *
@@ -166,7 +180,7 @@ public:
 	 * @return An initialized instance of IPlatformHardwareInfoInterface.
 	 */
 protected:
-	IPlatformHardwareInfo() = default;
+	IPlatformHardware() = default;
 
 	/**
 	 * Initializes the singleton instance of the platform hardware information
@@ -181,5 +195,5 @@ protected:
 	 * required during runtime.
 	 */
 private:
-	static std::unique_ptr<IPlatformHardwareInfo> PlatformInfoInstance;
+	static std::unique_ptr<IPlatformHardware> PlatformInfoInstance;
 };

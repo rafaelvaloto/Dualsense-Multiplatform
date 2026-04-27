@@ -3,7 +3,7 @@
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
 #pragma once
-#include "GCore/Interfaces/IPlatformHardwareInfo.h"
+#include "GCore/Interfaces/IPlatformHardware.h"
 #include "GCore/Types/Structs/Context/DeviceContext.h"
 
 namespace GamepadCore
@@ -29,14 +29,18 @@ namespace GamepadCore
 			t.ProcessAudioHaptic(ctx)
 		} -> std::same_as<void>;
 		{
+			t.ProcessAudioHaptic(ctx, std::declval<const std::vector<std::int16_t>&>())
+		} -> std::same_as<void>;
+		{
 			t.InitializeAudioDevice(ctx)
 		} -> std::same_as<void>;
 	};
 
 	template<typename THardwarePolicy>
-	class TGenericHardwareInfo : public IPlatformHardwareInfo
+	class TGenericHardwareInfo : public IPlatformHardware
 	{
 		THardwarePolicy Policy;
+		class IDeviceRegistry* Registry = nullptr;
 
 	public:
 		~TGenericHardwareInfo() override = default;
@@ -71,9 +75,24 @@ namespace GamepadCore
 			Policy.ProcessAudioHaptic(Context);
 		}
 
+		void ProcessAudioHaptic(FDeviceContext* Context, const std::vector<std::int16_t>& AudioData) override
+		{
+			Policy.ProcessAudioHaptic(Context, AudioData);
+		}
+
 		void InitializeAudioDevice(FDeviceContext* Context) override
 		{
 			Policy.InitializeAudioDevice(Context);
+		}
+
+		class IGamepadBase* GetLibrary(uint32_t EngineDeviceId) override
+		{
+			return Registry ? Registry->GetLibrary(EngineDeviceId) : nullptr;
+		}
+
+		void SetRegistry(class IDeviceRegistry* InRegistry) override
+		{
+			Registry = InRegistry;
 		}
 
 		THardwarePolicy& GetPolicy() { return Policy; }

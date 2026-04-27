@@ -4,9 +4,14 @@
 #pragma once
 #include "GCore/Types/DSCoreTypes.h"
 #include "GCore/Types/Structs/Context/DeviceContext.h"
-#include "GImplementations/Libraries/Base/SonyGamepadAbstract.h"
+#include "GImplementations/Libraries/Base/GamepadBase.h"
 
-class FDualShockLibrary : public SonyGamepadAbstract
+class FDualShockLibrary : public GamepadBase,
+						  public IGamepadRumbles,
+						  public IGamepadLightbar,
+						  public IGamepadSensors,
+						  public IGamepadTouch,
+						  public IGamepadHaptics
 {
 
 public:
@@ -24,7 +29,7 @@ public:
 	 *
 	 * @return Returns true if the library was successfully initialized.
 	 */
-	virtual bool Initialize(const FDeviceContext& Context) override;
+	bool Initialize(const FDeviceContext& Context) override;
 	/**
 	 * @brief Sends output data to the connected DualShock controller.
 	 *
@@ -39,8 +44,7 @@ public:
 	 * buffering to the appropriate manager, ensuring proper data flow to the
 	 * device.
 	 */
-	virtual void UpdateOutput() override;
-
+	void UpdateOutput() override;
 	/**
 	 * @brief Updates the input state for a DualShock device.
 	 *
@@ -50,8 +54,7 @@ public:
 	 * specified platform user and input device.
 	 * @return A boolean value indicating whether the input update was successful.
 	 */
-	virtual void UpdateInput(float /*Delta*/) override;
-
+	void UpdateInput(float /*Delta*/) override;
 	/**
 	 * @brief Configures the lightbar settings of the DualShock controller.
 	 *
@@ -62,18 +65,21 @@ public:
 	 *
 	 * @param Color An FColor object representing the desired RGB color of the
 	 * lightbar.
-	 * @param BrithnessTime A float value representing the duration (in seconds)
+	 * @param BrightnessTime A float value representing the duration (in seconds)
 	 * for which the lightbar stays bright during a flash cycle.
 	 * @param ToggleTime A float value representing the duration (in seconds) for
 	 * which the lightbar is toggled off during a flash cycle.
 	 */
-	virtual void SetLightbarFlash(DSCoreTypes::FDSColor Color, float BrithnessTime, float ToggleTime) override;
+	void SetLightbarFlash(DSCoreTypes::FDSColor Color, float BrightnessTime, float ToggleTime) override;
+	void SetLightbar(DSCoreTypes::FDSColor Color) override;
+	void SetPlayerLed(EDSPlayer Led, std::uint8_t Brightness) override {}
+	void SetMicrophoneLed(EDSMic Led) override {}
 	/**
 	 * Stops all currently active operations or actions associated with the
 	 * interface. This method must be implemented by any derived class to handle
 	 * the termination of all ongoing processes.
 	 */
-	virtual void ResetLights() override;
+	void ResetLights() override;
 	/**
 	 * @brief Sets the vibration strength for the DualShock controller.
 	 *
@@ -86,5 +92,24 @@ public:
 	 * @param RightRumble The intensity of the right motor's vibration (0-255).
 	 * Optional, defaults to 0.
 	 */
-	virtual void SetVibration(uint8_t LeftRumble, uint8_t RightRumble) override;
+	void SetVibration(uint8_t LeftRumble, uint8_t RightRumble) override;
+
+	IGamepadLightbar* GetIGamepadLightbar() override { return this; }
+	IGamepadRumbles* GetIGamepadRumbles() override { return this; }
+	IGamepadSensors* GetIGamepadSensors() override { return this; }
+	IGamepadTouch* GetIGamepadTouch() override { return this; }
+	IGamepadHaptics* GetIGamepadHaptics() override { return this; }
+
+	// IGamepadHaptics implementation
+	void AudioHapticUpdate(const std::vector<std::uint8_t>& /*Data*/) override {}
+	void AudioHapticUpdate(const std::vector<std::int16_t>& /*AudioData*/) override {}
+	void SendLegacyBTReport(const std::vector<std::int16_t>& /*AudioData*/) override {}
+
+	// IGamepadSensors implementation
+	void ResetGyroOrientation() override {}
+	void EnableMotionSensor(bool) override {}
+
+	// IGamepadTouch implementation
+	void EnableTouch(bool) override {}
+	void EnableGesture(bool) override {}
 };

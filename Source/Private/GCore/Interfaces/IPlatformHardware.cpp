@@ -3,18 +3,18 @@
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
 
-#include "GCore/Interfaces/IPlatformHardwareInfo.h"
+#include "GCore/Interfaces/IPlatformHardware.h"
 
-std::unique_ptr<IPlatformHardwareInfo>
-    IPlatformHardwareInfo::PlatformInfoInstance = nullptr;
+std::unique_ptr<IPlatformHardware>
+    IPlatformHardware::PlatformInfoInstance = nullptr;
 
-IPlatformHardwareInfo& IPlatformHardwareInfo::Get()
+IPlatformHardware& IPlatformHardware::Get()
 {
 	return *PlatformInfoInstance;
 }
 
-void IPlatformHardwareInfo::SetInstance(
-    std::unique_ptr<IPlatformHardwareInfo> InPlatform)
+void IPlatformHardware::SetInstance(
+    std::unique_ptr<IPlatformHardware> InPlatform)
 {
 	PlatformInfoInstance = std::move(InPlatform);
 }

@@ -2,8 +2,9 @@
 // Created for: GamepadCore - Plugin to support DualSense controller on Windows.
 // Planned Release Year: 2025
 #pragma once
+#include "GCore/Interfaces/IAudioDevice.h"
 #include "GCore/Interfaces/IDeviceRegistry.h"
-#include "GCore/Interfaces/IPlatformHardwareInfo.h"
+#include "GCore/Interfaces/IPlatformHardware.h"
 #include "GCore/Types/ECoreGamepad.h"
 #include "GImplementations/Libraries/DualSense/DualSenseLibrary.h"
 #include "GImplementations/Libraries/DualShock/DualShockLibrary.h"
@@ -12,6 +13,84 @@
 
 namespace GamepadCore
 {
+
+	template<typename T>
+	concept AudioDevicePolicy = requires(T t, typename T::EngineIdType id, typename T::AudioDeviceType audioDevice, typename T::AudioDeviceIdType audioDeviceId, typename T::AudioRingBufferType audioRingBuffer, typename T::AudioFrameCountType frameCount) {
+		typename T::EngineIdType;
+		typename T::AudioDeviceType;
+		typename T::AudioDeviceIdType;
+		typename T::AudioRingBufferType;
+		typename T::AudioFrameCountType;
+
+		{ t.Initialize() } -> std::same_as<bool>;
+		{ t.Close() } -> std::same_as<void>;
+		{ t.IsValid() } -> std::same_as<bool>;
+		{ t.InitializeWithDeviceId(T::AudioDeviceIdType) } -> std::same_as<bool>;
+		{ t.GetAvailableWriteFrames() } -> std::same_as<typename T::AudioFrameCountType>;
+		{ t.WriteHapticData(std::declval<const std::vector<std::int16_t>&>()) } -> std::same_as<bool>;
+		{ t.UnregisterAudioDevice(T::EngineIdType) } -> std::same_as<void>;
+		{ t.RegisterAudioDevice(T::EngineIdType, T::AudioDeviceIdType) } -> std::same_as<void>;
+	};
+
+	template<typename AudioDevicePolicy>
+	class TAudioDeviceRegistry : public IAudioDevice
+	{
+	public:
+
+		~TAudioDeviceRegistry() override = default;
+
+		// EngineId Device type
+		using EngineIdType = typename AudioDevicePolicy::EngineIdType;
+
+		// Audio Container types
+		using AudioDeviceType = typename AudioDevicePolicy::AudioDeviceType;
+		using AudioDeviceIdType = typename AudioDevicePolicy::AudioDeviceIdType;
+		using AudioRingBufferType = typename AudioDevicePolicy::AudioRingBufferType;
+		using AudioFrameCountType = typename AudioDevicePolicy::AudioFrameCountType;
+
+		AudioDevicePolicy Policy;
+
+		void Close()
+		{
+			Policy.clear();
+		}
+
+		bool IsValid()
+		{
+			return Policy.IsValid();
+		}
+
+		bool Initialize(int InSampleRate = 48000, int InNumChannels = 4)
+		{
+			return Policy.Initialize(InSampleRate, InNumChannels);
+		}
+
+		bool InitializeWithDeviceId(const AudioDeviceIdType* pDeviceId, int InSampleRate = 48000, int InNumChannels = 4)
+		{
+			return Policy.InitializeWithDeviceId(pDeviceId, InSampleRate, InNumChannels);
+		}
+
+		void ProcessAudioHaptic(const std::vector<std::int16_t>& AudioData)
+		{
+			Policy.WriteHapticData(AudioData);
+		}
+
+		void ProcessAudioHaptic(FDeviceContext* Context, const std::vector<std::int16_t>& AudioData) override
+		{
+			Policy.ProcessAudioHaptic(Context, AudioData);
+		}
+
+		void RegisterAudioDevice(EngineIdType EngineId, const AudioDeviceIdType* id = nullptr)
+		{
+			Policy.RegisterAudioDevice(EngineId, id);
+		}
+
+		void UnregisterAudioDevice(EngineIdType EngineId)
+		{
+			Policy.UnregisterAudioDevice(EngineId);
+		}
+	};
+
 	template<typename T>
 	concept DeviceRegistryPolicy = requires(T t, typename T::EngineIdType id) {
 		typename T::EngineIdType;
@@ -26,10 +105,12 @@ namespace GamepadCore
 	template<typename DeviceRegistryPolicy>
 	class TBasicDeviceRegistry : public IDeviceRegistry
 	{
+		// Device Engine type
 		using EngineIdType = typename DeviceRegistryPolicy::EngineIdType;
+
 		std::unordered_map<std::string, typename DeviceRegistryPolicy::EngineIdType> KnownDevicePaths;
 		std::unordered_map<std::string, typename DeviceRegistryPolicy::EngineIdType> HistoryDevices;
-		std::unordered_map<typename DeviceRegistryPolicy::EngineIdType, std::shared_ptr<ISonyGamepad>, typename DeviceRegistryPolicy::Hasher> LibraryInstances;
+		std::unordered_map<typename DeviceRegistryPolicy::EngineIdType, std::shared_ptr<IGamepadBase>, typename DeviceRegistryPolicy::Hasher> LibraryInstances;
 
 		float TimeAccumulator = 0.0f;
 		const float DetectionInterval = 1.0f;
@@ -37,9 +118,9 @@ namespace GamepadCore
 	public:
 		DeviceRegistryPolicy Policy;
 
-		virtual ~TBasicDeviceRegistry() override = default;
+		~TBasicDeviceRegistry() override = default;
 
-		virtual void PlugAndPlay(float DeltaTime) override
+		void PlugAndPlay(float DeltaTime) override
 		{
 			TimeAccumulator += DeltaTime;
 			if (TimeAccumulator < DetectionInterval)
@@ -57,7 +138,7 @@ namespace GamepadCore
 
 			std::vector<FDeviceContext> DetectedDevices;
 			DetectedDevices.clear();
-			IPlatformHardwareInfo::Get().Detect(DetectedDevices);
+			IPlatformHardware::Get().Detect(DetectedDevices);
 
 			for (const auto& Context : DetectedDevices)
 			{
@@ -78,18 +159,18 @@ namespace GamepadCore
 			for (auto Context : DetectedDevices)
 			{
 				Context.Output = FOutputContext();
-				if (bool IsCreateHandle = IPlatformHardwareInfo::Get().CreateHandle(&Context))
+				if (bool IsCreateHandle = IPlatformHardware::Get().CreateHandle(&Context))
 				{
 					CreateLibrary(Context);
 				}
 			}
 		}
 
-		ISonyGamepad* GetLibrary(EngineIdType DeviceId)
+		IGamepadBase* GetLibrary(EngineIdType DeviceId) override
 		{
 			if (LibraryInstances.contains(DeviceId))
 			{
-				return LibraryInstances[DeviceId].get();
+				return LibraryInstances.at(DeviceId).get();
 			}
 			return nullptr;
 		}
@@ -112,7 +193,7 @@ namespace GamepadCore
 	private:
 		void CreateLibrary(FDeviceContext& Context)
 		{
-			std::shared_ptr<ISonyGamepad> Gamepad = nullptr;
+			std::shared_ptr<IGamepadBase> Gamepad = nullptr;
 			if (Context.DeviceType == EDSDeviceType::DualSense || Context.DeviceType == EDSDeviceType::DualSenseEdge)
 			{
 				Gamepad = std::make_shared<FDualSenseLibrary>();
@@ -136,6 +217,7 @@ namespace GamepadCore
 			auto DeviceId = HistoryDevices[Context.Path];
 			if (!LibraryInstances.contains(DeviceId))
 			{
+				Context.EngineDeviceId = static_cast<uint32_t>(DeviceId);
 				Gamepad->Initialize(Context);
 				LibraryInstances[DeviceId] = Gamepad;
 				KnownDevicePaths[Context.Path] = DeviceId;

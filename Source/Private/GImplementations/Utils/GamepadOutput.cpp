@@ -4,14 +4,11 @@
 // Targets: Windows, Linux, macOS.
 
 #include "GImplementations/Utils/GamepadOutput.h"
-#include "GCore/Interfaces/IPlatformHardwareInfo.h"
-#include "GCore/Types/DSCoreTypes.h"
+#include "GCore/Interfaces/IPlatformHardware.h"
 #include "GCore/Types/ECoreGamepad.h"
 #include "GCore/Types/Structs/Context/DeviceContext.h"
 #include "GCore/Utils/CR32.h"
 #include "GCore/Utils/SoDefines.h"
-#include <iostream>
-#include <ostream>
 
 void FGamepadOutput::OutputDualShock(FDeviceContext* DeviceContext)
 {
@@ -59,7 +56,7 @@ void FGamepadOutput::OutputDualShock(FDeviceContext* DeviceContext)
 
 	{
 		gc_lock::lock_guard<gc_lock::mutex> LockGuard(DeviceContext->OutputMutex);
-		IPlatformHardwareInfo::Get().Write(DeviceContext);
+		IPlatformHardware::Get().Write(DeviceContext);
 	}
 }
 
@@ -122,7 +119,7 @@ void FGamepadOutput::OutputDualSense(FDeviceContext* DeviceContext)
 			MutableBuffer[0x4D] = static_cast<unsigned char>((CrcChecksum & 0xFF000000) >> 24UL);
 		}
 
-		IPlatformHardwareInfo::Get().Write(DeviceContext);
+		IPlatformHardware::Get().Write(DeviceContext);
 	}
 }
 
@@ -260,6 +257,6 @@ void FGamepadOutput::SendAudioHapticAdvanced(
 		DeviceContext->BufferAudio[CrcOffset + 2] = static_cast<unsigned char>((CrcChecksum & 0x00FF0000) >> 16UL);
 		DeviceContext->BufferAudio[CrcOffset + 3] = static_cast<unsigned char>((CrcChecksum & 0xFF000000) >> 24UL);
 
-		IPlatformHardwareInfo::Get().ProcessAudioHaptic(DeviceContext);
+		IPlatformHardware::Get().ProcessAudioHaptic(DeviceContext);
 	}
 }

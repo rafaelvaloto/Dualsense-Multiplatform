@@ -3,24 +3,24 @@
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
 #pragma once
-#include "GCore/Interfaces/ISonyGamepad.h"
+#include "../../../GCore/Interfaces/Segregations/IGamepadBase.h"
 #include "GCore/Types/DSCoreTypes.h"
 #include "GCore/Types/ECoreGamepad.h"
 
 /**
- * @class SonyGamepadAbstract
+ * @class GamepadBase
  * @brief An abstract base class derived from the ISonyGamepad interface.
  *
- * The SonyGamepadAbstract class serves as a foundational class for implementing
+ * The GamepadBase class serves as a foundational class for implementing
  * gamepad functionality specific to Sony devices. It inherits from the
  * ISonyGamepad interface, which provides methods and features for managing
  * gamepad status, lightbar, sensors, touch input, triggers, audio-driven
  * haptics, and more.
  *
- * Classes inheriting from SonyGamepadAbstract are expected to implement the
+ * Classes inheriting from GamepadBase are expected to implement the
  * behaviors defined by the ISonyGamepad interface.
  */
-class SonyGamepadAbstract : public ISonyGamepad
+class GamepadBase : public IGamepadBase
 {
 
 public:
@@ -90,59 +90,6 @@ public:
 	 */
 	float GetBattery() override;
 	/**
-	 * Stops all currently active operations or actions associated with the
-	 * interface. This method must be implemented by any derived class to handle
-	 * the termination of all ongoing processes.
-	 */
-	void ResetLights() override {}
-	void SetLightbar(DSCoreTypes::FDSColor /*Color*/) override {}
-	void SetLightbarFlash(DSCoreTypes::FDSColor /*Color*/, float /*BrithnessTime*/, float /*ToggleTime*/) override {}
-	void DualSenseSettings(std::uint8_t /*bIsMic*/, std::uint8_t /*bIsHeadset*/, std::uint8_t /*bIsSpeaker*/, std::uint8_t /*MicVolume*/, std::uint8_t /*AudioVolume*/, std::uint8_t /*RumbleMode*/, std::uint8_t /*RumbleReduce*/, std::uint8_t /*TriggerReduce*/) override {}
-
-	/**
-	 * Sets the LED associated with the player on the Sony gamepad to a specified
-	 * brightness level.
-	 *
-	 * @param Led The LED associated with a specific player, represented as an
-	 * ELedPlayerEnum.
-	 * @param Brightness The desired brightness level for the LED, represented as
-	 * an ELedBrightnessEnum.
-	 */
-	void SetPlayerLed(EDSPlayer /*Led*/, std::uint8_t /*Brightness*/) override {}
-	/**
-	 * Sets the state of the microphone LED on the gamepad.
-	 *
-	 * @param Led The desired state of the microphone LED, represented by
-	 * ELedMicEnum.
-	 */
-	void SetMicrophoneLed(EDSMic /*Led*/) override {}
-	/**
-	 * Sets the touch state for the device.
-	 *
-	 * @param bIsTouch A boolean indicating whether touch input is enabled (true)
-	 * or disabled (false).
-	 */
-	void EnableTouch(bool bIsTouch) override;
-	/**
-	 * Sets the touch state for the device.
-	 *
-	 * @param bIsGesture A boolean indicating whether touch input is enabled
-	 * (true) or disabled (false).
-	 */
-	void EnableGesture(bool bIsGesture) override;
-	/**
-	 * Resets the orientation of the gyroscope to its default state.
-	 * Typically used to recalibrate the gyroscope sensor.
-	 */
-	void ResetGyroOrientation() override;
-	/**
-	 * Enables the motion sensor functionality of the gamepad.
-	 *
-	 * @param bIsMotionSensor Specifies whether to enable the gyroscope (true) or
-	 * accelerometer (false) as the motion sensor.
-	 */
-	void EnableMotionSensor(bool bIsMotionSensor) override;
-	/**
 	 * @brief Retrieves a mutable device context associated with the object.
 	 *
 	 * This method provides access to the device context in a mutable form,
@@ -157,17 +104,7 @@ public:
 		return &HIDDeviceContexts;
 	}
 
-	/**
-	 * @brief Sets the vibration feedback of the gamepad.
-	 *
-	 * This method overrides the base implementation to configure the vibration
-	 * feedback intensity for the gamepad based on the provided force feedback
-	 * values.
-	 *
-	 */
-	void SetVibration(std::uint8_t /*LeftRumble*/, std::uint8_t /*RightRumble*/) override {}
-
-	SonyGamepadAbstract()
+	GamepadBase()
 	    : HIDDeviceContexts()
 	{}
 
@@ -196,10 +133,10 @@ private:
 	 * - `true`: A phone is connected.
 	 * - `false`: No phone is connected.
 	 */
-	bool bHasPhoneConnected;
+	bool bHasPhoneConnected{};
 	/**
 	 * @brief Represents the context of a Human Interface Device (HID) used by
-	 * DualSense controllers.
+	 * Controllers.
 	 *
 	 * This variable holds the FDeviceContext structure, which encapsulates the
 	 * necessary state and configuration details for managing the connection,

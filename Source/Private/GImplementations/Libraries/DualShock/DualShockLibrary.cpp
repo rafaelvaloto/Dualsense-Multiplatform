@@ -4,7 +4,7 @@
 // Targets: Windows, Linux, macOS.
 
 #include "GImplementations/Libraries/DualShock/DualShockLibrary.h"
-#include "GCore/Interfaces/IPlatformHardwareInfo.h"
+#include "GCore/Interfaces/IPlatformHardware.h"
 #include "GCore/Types/ECoreGamepad.h"
 #include "GImplementations/Utils/GamepadInput.h"
 #include "GImplementations/Utils/GamepadOutput.h"
@@ -33,7 +33,7 @@ void FDualShockLibrary::UpdateOutput()
 void FDualShockLibrary::UpdateInput(float /*Delta*/)
 {
 	FDeviceContext* Context = GetMutableDeviceContext();
-	IPlatformHardwareInfo::Get().Read(Context);
+	IPlatformHardware::Get().Read(Context);
 	FInputContext* InputToFill = Context->GetBackBuffer();
 
 	using namespace FGamepadInput;
@@ -100,7 +100,7 @@ void FDualShockLibrary::SetVibration(std::uint8_t LeftRumble, std::uint8_t Right
 	}
 }
 
-void FDualShockLibrary::SetLightbarFlash(DSCoreTypes::FDSColor Color, float BrithnessTime, float ToggleTime)
+void FDualShockLibrary::SetLightbarFlash(DSCoreTypes::FDSColor Color, float BrightnessTime, float ToggleTime)
 {
 	FDeviceContext* Context = GetMutableDeviceContext();
 	FOutputContext* HidOutput = &Context->Output;
@@ -108,11 +108,16 @@ void FDualShockLibrary::SetLightbarFlash(DSCoreTypes::FDSColor Color, float Brit
 	HidOutput->Lightbar.G = Color.G;
 	HidOutput->Lightbar.B = Color.B;
 
-	HidOutput->FlashLigthbar.Bright_Time = static_cast<std::uint8_t>((BrithnessTime / 2.5f) * 255);
+	HidOutput->FlashLigthbar.Bright_Time = static_cast<std::uint8_t>((BrightnessTime / 2.5f) * 255);
 	HidOutput->FlashLigthbar.Toggle_Time = static_cast<std::uint8_t>((ToggleTime / 2.5f) * 255);
 }
 
 void FDualShockLibrary::ResetLights()
 {
 	SetLightbarFlash({0, 0, 255, 0}, 0.0f, 0.0f);
+}
+
+void FDualShockLibrary::SetLightbar(DSCoreTypes::FDSColor Color)
+{
+	SetLightbarFlash(Color, 0.0f, 0.0f);
 }

@@ -9,4 +9,5 @@ class IDeviceRegistry
 public:
 	virtual ~IDeviceRegistry() = default;
 	virtual void PlugAndPlay(float DeltaTime) = 0;
+	virtual class IGamepadBase* GetLibrary(uint32_t EngineDeviceId) = 0;
 };
