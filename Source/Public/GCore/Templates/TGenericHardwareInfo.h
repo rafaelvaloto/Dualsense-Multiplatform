@@ -28,19 +28,12 @@ namespace GamepadCore
 		{
 			t.ProcessAudioHaptic(ctx)
 		} -> std::same_as<void>;
-		{
-			t.ProcessAudioHaptic(ctx, std::declval<const std::vector<std::int16_t>&>())
-		} -> std::same_as<void>;
-		{
-			t.InitializeAudioDevice(ctx)
-		} -> std::same_as<void>;
 	};
 
 	template<typename THardwarePolicy>
 	class TGenericHardwareInfo : public IPlatformHardware
 	{
 		THardwarePolicy Policy;
-		class IDeviceRegistry* Registry = nullptr;
 
 	public:
 		~TGenericHardwareInfo() override = default;
@@ -70,6 +63,7 @@ namespace GamepadCore
 			Policy.InvalidateHandle(Context);
 		}
 
+		// Apenas usado para Bluetooth
 		void ProcessAudioHaptic(FDeviceContext* Context) override
 		{
 			Policy.ProcessAudioHaptic(Context);
@@ -87,12 +81,12 @@ namespace GamepadCore
 
 		class IGamepadBase* GetLibrary(uint32_t EngineDeviceId) override
 		{
-			return Registry ? Registry->GetLibrary(EngineDeviceId) : nullptr;
+			return Policy.GetLibrary(EngineDeviceId);
 		}
 
 		void SetRegistry(class IDeviceRegistry* InRegistry) override
 		{
-			Registry = InRegistry;
+			Policy.SetRegistry(InRegistry);
 		}
 
 		THardwarePolicy& GetPolicy() { return Policy; }

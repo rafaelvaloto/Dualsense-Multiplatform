@@ -8,6 +8,7 @@
 #include "IGamepadLightbar.h"
 #include "IGamepadRumbles.h"
 #include "IGamepadSensors.h"
+#include "IGamepadSettings.h"
 #include "IGamepadStatus.h"
 #include "IGamepadTouch.h"
 #include "IGamepadTrigger.h"
@@ -124,4 +125,5 @@ public:
 	 *         if the touchpad functionality is not available or not implemented.
 	 */
 	virtual IGamepadTouch* GetIGamepadTouch() { return nullptr; }
+	virtual IGamepadSettings* GetIGamepadSettings() { return nullptr; }
 };

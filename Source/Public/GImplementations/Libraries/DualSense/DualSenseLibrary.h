@@ -111,6 +111,7 @@ public:
 	 * @return A pointer to the IGamepadTouch interface for managing touch input.
 	 */
 	IGamepadTouch* GetIGamepadTouch() override { return this; }
+	IGamepadSettings* GetIGamepadSettings() override { return this; }
 
 	/**
 	 * @brief Configures settings for the PlayStation DualSense controller.

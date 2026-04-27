@@ -16,5 +16,7 @@ public:
 	static IAudioDevice& Get();
 	static void SetInstance(IAudioDevice* InInstance);
 
+	virtual void UnregisterAudioDevice(std::string Path) = 0;
+	virtual void InitializeAudioContainer(FDeviceContext* Context) = 0;
 	virtual void ProcessAudioHaptic(FDeviceContext* Context, const std::vector<std::int16_t>& AudioData) = 0;
 };

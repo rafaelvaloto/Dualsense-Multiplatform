@@ -13,84 +13,6 @@
 
 namespace GamepadCore
 {
-
-	template<typename T>
-	concept AudioDevicePolicy = requires(T t, typename T::EngineIdType id, typename T::AudioDeviceType audioDevice, typename T::AudioDeviceIdType audioDeviceId, typename T::AudioRingBufferType audioRingBuffer, typename T::AudioFrameCountType frameCount) {
-		typename T::EngineIdType;
-		typename T::AudioDeviceType;
-		typename T::AudioDeviceIdType;
-		typename T::AudioRingBufferType;
-		typename T::AudioFrameCountType;
-
-		{ t.Initialize() } -> std::same_as<bool>;
-		{ t.Close() } -> std::same_as<void>;
-		{ t.IsValid() } -> std::same_as<bool>;
-		{ t.InitializeWithDeviceId(T::AudioDeviceIdType) } -> std::same_as<bool>;
-		{ t.GetAvailableWriteFrames() } -> std::same_as<typename T::AudioFrameCountType>;
-		{ t.WriteHapticData(std::declval<const std::vector<std::int16_t>&>()) } -> std::same_as<bool>;
-		{ t.UnregisterAudioDevice(T::EngineIdType) } -> std::same_as<void>;
-		{ t.RegisterAudioDevice(T::EngineIdType, T::AudioDeviceIdType) } -> std::same_as<void>;
-	};
-
-	template<typename AudioDevicePolicy>
-	class TAudioDeviceRegistry : public IAudioDevice
-	{
-	public:
-
-		~TAudioDeviceRegistry() override = default;
-
-		// EngineId Device type
-		using EngineIdType = typename AudioDevicePolicy::EngineIdType;
-
-		// Audio Container types
-		using AudioDeviceType = typename AudioDevicePolicy::AudioDeviceType;
-		using AudioDeviceIdType = typename AudioDevicePolicy::AudioDeviceIdType;
-		using AudioRingBufferType = typename AudioDevicePolicy::AudioRingBufferType;
-		using AudioFrameCountType = typename AudioDevicePolicy::AudioFrameCountType;
-
-		AudioDevicePolicy Policy;
-
-		void Close()
-		{
-			Policy.clear();
-		}
-
-		bool IsValid()
-		{
-			return Policy.IsValid();
-		}
-
-		bool Initialize(int InSampleRate = 48000, int InNumChannels = 4)
-		{
-			return Policy.Initialize(InSampleRate, InNumChannels);
-		}
-
-		bool InitializeWithDeviceId(const AudioDeviceIdType* pDeviceId, int InSampleRate = 48000, int InNumChannels = 4)
-		{
-			return Policy.InitializeWithDeviceId(pDeviceId, InSampleRate, InNumChannels);
-		}
-
-		void ProcessAudioHaptic(const std::vector<std::int16_t>& AudioData)
-		{
-			Policy.WriteHapticData(AudioData);
-		}
-
-		void ProcessAudioHaptic(FDeviceContext* Context, const std::vector<std::int16_t>& AudioData) override
-		{
-			Policy.ProcessAudioHaptic(Context, AudioData);
-		}
-
-		void RegisterAudioDevice(EngineIdType EngineId, const AudioDeviceIdType* id = nullptr)
-		{
-			Policy.RegisterAudioDevice(EngineId, id);
-		}
-
-		void UnregisterAudioDevice(EngineIdType EngineId)
-		{
-			Policy.UnregisterAudioDevice(EngineId);
-		}
-	};
-
 	template<typename T>
 	concept DeviceRegistryPolicy = requires(T t, typename T::EngineIdType id) {
 		typename T::EngineIdType;
@@ -217,7 +139,6 @@ namespace GamepadCore
 			auto DeviceId = HistoryDevices[Context.Path];
 			if (!LibraryInstances.contains(DeviceId))
 			{
-				Context.EngineDeviceId = static_cast<uint32_t>(DeviceId);
 				Gamepad->Initialize(Context);
 				LibraryInstances[DeviceId] = Gamepad;
 				KnownDevicePaths[Context.Path] = DeviceId;
