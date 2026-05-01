@@ -241,7 +241,7 @@ void FGamepadOutput::SetTriggerEffects(unsigned char* Trigger, FGamepadTriggersH
 }
 
 void FGamepadOutput::SendAudioHapticAdvanced(
-    FDeviceContext* DeviceContext)
+    FDeviceContext* DeviceContext, size_t CrcOffset)
 {
 	if (!DeviceContext)
 	{
@@ -250,13 +250,11 @@ void FGamepadOutput::SendAudioHapticAdvanced(
 
 	if (DeviceContext->ConnectionType == EDSDeviceConnection::Bluetooth)
 	{
-		constexpr size_t CrcOffset = 138;
 		const auto CrcChecksum = GCoreUtils::CR32::Compute(DeviceContext->BufferAudio, CrcOffset);
 		DeviceContext->BufferAudio[CrcOffset + 0] = static_cast<unsigned char>((CrcChecksum & 0x000000FF) >> 0UL);
 		DeviceContext->BufferAudio[CrcOffset + 1] = static_cast<unsigned char>((CrcChecksum & 0x0000FF00) >> 8UL);
 		DeviceContext->BufferAudio[CrcOffset + 2] = static_cast<unsigned char>((CrcChecksum & 0x00FF0000) >> 16UL);
 		DeviceContext->BufferAudio[CrcOffset + 3] = static_cast<unsigned char>((CrcChecksum & 0xFF000000) >> 24UL);
-
 		IPlatformHardware::Get().ProcessAudioHaptic(DeviceContext);
 	}
 }

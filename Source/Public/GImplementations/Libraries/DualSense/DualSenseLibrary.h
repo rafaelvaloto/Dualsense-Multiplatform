@@ -427,6 +427,7 @@ public:
 	 * DualSense controllers.
 	 */
 	void AudioHapticUpdate(const std::vector<std::uint8_t>& Data) override;
+	void AudioHapticUpdate(const std::vector<std::uint8_t>& HapticsData, const std::vector<std::uint8_t>& AudioData) override;
 	/**
 	 * @brief Updates the haptic feedback of the DualSense controller based on provided audio data.
 	 *
@@ -440,7 +441,6 @@ public:
 	 * the DualSense controller.
 	 */
 	void AudioHapticUpdate(const std::vector<std::int16_t>& AudioData) override;
-	void SendLegacyBTReport(const std::vector<std::int16_t>& AudioData) override {}
 
 	// IGamepadSensors implementation
 	void ResetGyroOrientation() override {}
@@ -467,4 +467,5 @@ private:
 	 * environments or devices.
 	 */
 	std::uint8_t AudioVibrationSequence;
+	std::uint8_t AudioSequence;
 };

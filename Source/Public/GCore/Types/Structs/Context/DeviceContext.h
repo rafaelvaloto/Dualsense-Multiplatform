@@ -92,7 +92,8 @@ struct FDeviceContext
 	 * to a connected DualSense device, enabling advanced vibration and
 	 * feedback mechanisms driven by audio signals.
 	 */
-	unsigned char BufferAudio[142] = {};
+	unsigned char BufferAudio[398] = {};
+	unsigned char BufferHapitcs[142] = {};
 	/**
 	 * @brief Holds calibration data for a gamepad device.
 	 *
@@ -224,6 +225,7 @@ struct FDeviceContext
 	 */
  mutable gc_lock::mutex InputMutex;
  mutable gc_lock::mutex OutputMutex;
+ mutable gc_lock::mutex AudioMutex;
 
 	unsigned char* GetRawOutputBuffer() { return BufferOutput; }
 

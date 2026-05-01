@@ -1,4 +1,20 @@
 cmake_minimum_required(VERSION 3.20)
+set(CMAKE_POLICY_DEFAULT_CMP0000 NEW)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+include(FetchContent)
+
+# Opus for Bluetooth audio compression
+FetchContent_Declare(
+        opus
+        GIT_REPOSITORY https://github.com/xiph/opus.git
+        GIT_TAG        v1.4
+)
+
+#
+set(OPUS_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(OPUS_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(opus)
 
 # Main project name
 project(GamepadCore LANGUAGES CXX)

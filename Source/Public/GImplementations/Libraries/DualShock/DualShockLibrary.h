@@ -98,12 +98,6 @@ public:
 	IGamepadRumbles* GetIGamepadRumbles() override { return this; }
 	IGamepadSensors* GetIGamepadSensors() override { return this; }
 	IGamepadTouch* GetIGamepadTouch() override { return this; }
-	IGamepadHaptics* GetIGamepadHaptics() override { return this; }
-
-	// IGamepadHaptics implementation
-	void AudioHapticUpdate(const std::vector<std::uint8_t>& /*Data*/) override {}
-	void AudioHapticUpdate(const std::vector<std::int16_t>& /*AudioData*/) override {}
-	void SendLegacyBTReport(const std::vector<std::int16_t>& /*AudioData*/) override {}
 
 	// IGamepadSensors implementation
 	void ResetGyroOrientation() override {}
@@ -112,4 +106,11 @@ public:
 	// IGamepadTouch implementation
 	void EnableTouch(bool) override {}
 	void EnableGesture(bool) override {}
+
+	// IGamepadHaptics implementation
+	void AudioHapticUpdate(const std::vector<std::uint8_t>& /*AudioData*/) override {}
+	void AudioHapticUpdate(const std::vector<std::int16_t>& /*AudioData*/) override {}
+	void AudioHapticUpdate(const std::vector<std::uint8_t>& /*HapticsData*/, const std::vector<std::uint8_t>& /*AudioData*/) override {}
+
+	IGamepadHaptics* GetIGamepadHaptics() override { return this; }
 };

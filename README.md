@@ -532,6 +532,7 @@ The foundation of this plugin was built upon the research and code from several 
 * [miniaudio](https://github.com/mackron/miniaudio) - Audio playback and conversion library.
 * [Ryochan7/DS4Windows](https://github.com/Ryochan7/DS4Windows) - Industry standard for DualShock/DualSense on Windows.
 * [linux/drivers/hid/hid-playstation.c](https://github.com/torvalds/linux/blob/master/drivers/hid/hid-playstation.c#L1709) - Reference for calibration, gyroscope, and Linux driver standards.
+* [Awalol/DS5Dongle](https://github.com/awalol/DS5Dongle) - Reference **Bluetooth Audio (Headset/Speaker)** opus codec and buffer sizes.
 
 Special thanks to the community members who helped improve this plugin:
 
