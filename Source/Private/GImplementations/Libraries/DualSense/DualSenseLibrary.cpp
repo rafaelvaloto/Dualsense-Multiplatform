@@ -113,16 +113,17 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 		//
 
 		// Audio haptics bluetooth
-		DSContext->BufferAudio[0] = 0x36;
-		DSContext->BufferAudio[1] = 0x00;
-		DSContext->BufferAudio[2] = 0x91;
-		DSContext->BufferAudio[3] = 0x07;
-		DSContext->BufferAudio[4] = 0xfe;
-		DSContext->BufferAudio[5] = 0b01001001; // frequency filters  (?)
-		DSContext->BufferAudio[6] = 0b01001001; // ...
-		DSContext->BufferAudio[7] = 0b01001001; // ...
-		DSContext->BufferAudio[8] = 0b01001001; // ...
-		DSContext->BufferAudio[9] = 0b01000000; // sync times (?)
+		DSContext->BufferHapitcs[0] = 0x36;
+		DSContext->BufferHapitcs[1] = 0x00;
+		DSContext->BufferHapitcs[2] = 0x91;
+		DSContext->BufferHapitcs[3] = 0x07;
+		DSContext->BufferHapitcs[4] = 0xfe;
+		DSContext->BufferHapitcs[5] = 0b11111111; // frequency filters  (?)
+		DSContext->BufferHapitcs[6] = 0b00111111; // ...
+		DSContext->BufferHapitcs[7] = 0b00111111; // ...
+		DSContext->BufferHapitcs[8] = 0b11111111; // ...
+		//DSContext->BufferHapitcs[9] = 0b01001111; // sync times (?)
+		DSContext->BufferHapitcs[9] = 0b01000000; // sync times (?)
 		return true;
 	}
 
@@ -318,10 +319,9 @@ void FDualSenseLibrary::AudioHapticUpdate(const std::vector<std::uint8_t>& Hapti
 		return;
 	}
 
-	std::cout << "Write on buffer hardware: " << std::endl;
 	{
 		gc_lock::lock_guard<gc_lock::mutex> LockGuard(Context->AudioMutex);
-		unsigned char* Audio = &Context->BufferAudio[0];
+		unsigned char* Audio = &Context->BufferHapitcs[0];
 		Audio[10] = (AudioVibrationSequence++) & 0xFF;
 		Audio[11] = 0x92;
 		Audio[12] = 0x40;

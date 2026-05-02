@@ -251,12 +251,11 @@ void FGamepadOutput::SendAudioHapticAdvanced(
 
 	if (DeviceContext->ConnectionType == EDSDeviceConnection::Bluetooth)
 	{
-		const auto CrcChecksum = GCoreUtils::CR32::Compute(DeviceContext->BufferAudio, CrcOffset);
-		DeviceContext->BufferAudio[CrcOffset + 0] = static_cast<unsigned char>((CrcChecksum & 0x000000FF) >> 0UL);
-		DeviceContext->BufferAudio[CrcOffset + 1] = static_cast<unsigned char>((CrcChecksum & 0x0000FF00) >> 8UL);
-		DeviceContext->BufferAudio[CrcOffset + 2] = static_cast<unsigned char>((CrcChecksum & 0x00FF0000) >> 16UL);
-		DeviceContext->BufferAudio[CrcOffset + 3] = static_cast<unsigned char>((CrcChecksum & 0xFF000000) >> 24UL);
-		std::cout << "CrcChecksum : " << std::endl;
+		const auto CrcChecksum = GCoreUtils::CR32::Compute(DeviceContext->BufferHapitcs, CrcOffset);
+		DeviceContext->BufferHapitcs[CrcOffset + 0] = static_cast<unsigned char>((CrcChecksum & 0x000000FF) >> 0UL);
+		DeviceContext->BufferHapitcs[CrcOffset + 1] = static_cast<unsigned char>((CrcChecksum & 0x0000FF00) >> 8UL);
+		DeviceContext->BufferHapitcs[CrcOffset + 2] = static_cast<unsigned char>((CrcChecksum & 0x00FF0000) >> 16UL);
+		DeviceContext->BufferHapitcs[CrcOffset + 3] = static_cast<unsigned char>((CrcChecksum & 0xFF000000) >> 24UL);
 		IPlatformHardware::Get().ProcessAudioHaptic(DeviceContext);
 	}
 }

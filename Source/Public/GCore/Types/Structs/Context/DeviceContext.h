@@ -92,8 +92,7 @@ struct FDeviceContext
 	 * to a connected DualSense device, enabling advanced vibration and
 	 * feedback mechanisms driven by audio signals.
 	 */
-	unsigned char BufferAudio[398] = {};
-	unsigned char BufferHapitcs[142] = {};
+	unsigned char BufferHapitcs[398] = {};
 	/**
 	 * @brief Holds calibration data for a gamepad device.
 	 *
@@ -283,7 +282,7 @@ public:
 
 			std::memcpy(Buffer, Other.Buffer, sizeof(Buffer));
 			std::memcpy(BufferDS4, Other.BufferDS4, sizeof(BufferDS4));
-			std::memcpy(BufferAudio, Other.BufferAudio, sizeof(BufferAudio));
+			std::memcpy(BufferHapitcs, Other.BufferHapitcs, sizeof(BufferHapitcs));
 			std::memcpy(BufferOutput, Other.BufferOutput, sizeof(BufferOutput));
 
 			// Auxiliary state variables
