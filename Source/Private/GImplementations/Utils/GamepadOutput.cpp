@@ -9,6 +9,7 @@
 #include "GCore/Types/Structs/Context/DeviceContext.h"
 #include "GCore/Utils/CR32.h"
 #include "GCore/Utils/SoDefines.h"
+#include <iostream>
 
 void FGamepadOutput::OutputDualShock(FDeviceContext* DeviceContext)
 {
@@ -255,6 +256,7 @@ void FGamepadOutput::SendAudioHapticAdvanced(
 		DeviceContext->BufferAudio[CrcOffset + 1] = static_cast<unsigned char>((CrcChecksum & 0x0000FF00) >> 8UL);
 		DeviceContext->BufferAudio[CrcOffset + 2] = static_cast<unsigned char>((CrcChecksum & 0x00FF0000) >> 16UL);
 		DeviceContext->BufferAudio[CrcOffset + 3] = static_cast<unsigned char>((CrcChecksum & 0xFF000000) >> 24UL);
+		std::cout << "CrcChecksum : " << std::endl;
 		IPlatformHardware::Get().ProcessAudioHaptic(DeviceContext);
 	}
 }
