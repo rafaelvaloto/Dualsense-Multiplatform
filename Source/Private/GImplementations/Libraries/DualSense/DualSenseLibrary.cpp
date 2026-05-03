@@ -102,15 +102,11 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 			gc_sync::sleep_ms(50);
 		}
 
-		DSContext->Output.Feature.VibrationMode = 0xFC;
+		DSContext->Output.Feature.VibrationMode = 0xFF;
 		DSContext->Output.Feature.FeatureMode = 0x57;
-		DSContext->Output.Audio.SpeakerVolume = 255;
-		DSContext->Output.Audio.HeadsetVolume = 255;
 		DSContext->Output.Lightbar = {100, 100, 0};
 		UpdateOutput();
 		gc_sync::sleep_ms(50);
-
-		//
 
 		// Audio haptics bluetooth
 		DSContext->BufferHapitcs[0] = 0x36;

@@ -10,8 +10,7 @@ class FDualShockLibrary : public GamepadBase,
 						  public IGamepadRumbles,
 						  public IGamepadLightbar,
 						  public IGamepadSensors,
-						  public IGamepadTouch,
-						  public IGamepadHaptics
+						  public IGamepadTouch
 {
 
 public:
@@ -100,17 +99,42 @@ public:
 	IGamepadTouch* GetIGamepadTouch() override { return this; }
 
 	// IGamepadSensors implementation
-	void ResetGyroOrientation() override {}
-	void EnableMotionSensor(bool) override {}
+	void ResetGyroOrientation() override
+	{
+		FDeviceContext* Context = GetMutableDeviceContext();
+		if (!Context)
+		{
+			return;
+		}
+		Context->bIsResetGyroscope = true;
+	}
+	void EnableMotionSensor(bool isEnabled) override
+	{
+		FDeviceContext* Context = GetMutableDeviceContext();
+		if (!Context)
+		{
+			return;
+		}
+		Context->bEnableAccelerometerAndGyroscope = isEnabled;
+	}
 
 	// IGamepadTouch implementation
-	void EnableTouch(bool) override {}
-	void EnableGesture(bool) override {}
-
-	// IGamepadHaptics implementation
-	void AudioHapticUpdate(const std::vector<std::uint8_t>& /*AudioData*/) override {}
-	void AudioHapticUpdate(const std::vector<std::int16_t>& /*AudioData*/) override {}
-	void AudioHapticUpdate(const std::vector<std::uint8_t>& /*HapticsData*/, const std::vector<std::uint8_t>& /*AudioData*/) override {}
-
-	IGamepadHaptics* GetIGamepadHaptics() override { return this; }
+	void EnableTouch(bool isEnabled) override
+	{
+		FDeviceContext* Context = GetMutableDeviceContext();
+		if (!Context)
+		{
+			return;
+		}
+		Context->bEnableTouch = isEnabled;
+	}
+	void EnableGesture(bool isEnabled) override
+	{
+		FDeviceContext* Context = GetMutableDeviceContext();
+		if (!Context)
+		{
+			return;
+		}
+		Context->bEnableGesture = isEnabled;
+	}
 };

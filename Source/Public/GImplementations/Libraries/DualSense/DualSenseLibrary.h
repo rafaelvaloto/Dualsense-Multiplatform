@@ -443,12 +443,44 @@ public:
 	void AudioHapticUpdate(const std::vector<std::int16_t>& AudioData) override;
 
 	// IGamepadSensors implementation
-	void ResetGyroOrientation() override {}
-	void EnableMotionSensor(bool) override {}
+	void ResetGyroOrientation() override
+	{
+		FDeviceContext* Context = GetMutableDeviceContext();
+		if (!Context)
+		{
+			return;
+		}
+		Context->bIsResetGyroscope = true;
+	}
+	void EnableMotionSensor(bool isEnabled) override
+	{
+		FDeviceContext* Context = GetMutableDeviceContext();
+		if (!Context)
+		{
+			return;
+		}
+		Context->bEnableAccelerometerAndGyroscope = isEnabled;
+	}
 
 	// IGamepadTouch implementation
-	void EnableTouch(bool) override {}
-	void EnableGesture(bool) override {}
+	void EnableTouch(bool isEnabled) override
+	{
+		FDeviceContext* Context = GetMutableDeviceContext();
+		if (!Context)
+		{
+			return;
+		}
+		Context->bEnableTouch = isEnabled;
+	}
+	void EnableGesture(bool isEnabled) override
+	{
+		FDeviceContext* Context = GetMutableDeviceContext();
+		if (!Context)
+		{
+			return;
+		}
+		Context->bEnableGesture = isEnabled;
+	}
 
 private:
 	/**
