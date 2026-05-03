@@ -125,5 +125,15 @@ public:
 	 *         if the touchpad functionality is not available or not implemented.
 	 */
 	virtual IGamepadTouch* GetIGamepadTouch() { return nullptr; }
+	/**
+	 * Retrieves the settings interface associated with the gamepad.
+	 *
+	 * This method provides access to an `IGamepadSettings` instance, allowing
+	 * configurations or settings specific to the gamepad to be accessed or modified.
+	 * If the settings functionality is not supported or available, this method returns nullptr.
+	 *
+	 * @return A pointer to an `IGamepadSettings` interface if available, or nullptr
+	 *         if the settings functionality is not supported or not implemented.
+	 */
 	virtual IGamepadSettings* GetIGamepadSettings() { return nullptr; }
 };
