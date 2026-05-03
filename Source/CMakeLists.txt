@@ -20,7 +20,6 @@ file(GLOB_RECURSE GAMEPADCORE_SOURCES
 add_library(GamepadCore STATIC
         ${GAMEPADCORE_HEADERS}
         ${GAMEPADCORE_SOURCES}
-        Public/GImplementations/Utils/GamepadAudio.h
 )
 
 target_include_directories(GamepadCore
