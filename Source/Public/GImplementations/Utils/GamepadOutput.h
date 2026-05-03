@@ -70,5 +70,5 @@ public:
 	 * PlayStation device. If the connection type is Bluetooth, audio haptic data
 	 * is processed and sent to the device.
 	 */
-	static void SendAudioHapticAdvanced(FDeviceContext* DeviceContext);
+	static void SendAudioHapticAdvanced(FDeviceContext* DeviceContext, size_t CrcOffset);
 };

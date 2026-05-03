@@ -41,8 +41,14 @@ public:
 	virtual void AudioHapticUpdate(const std::vector<std::int16_t>& AudioData) = 0;
 
 	/**
-	 * Internal method for sending legacy Bluetooth audio haptic reports.
-	 * This is used to avoid infinite recursion when routing audio through IAudioDevice.
+	 * Updates the audio haptic feedback using the provided haptic and audio data.
+	 * This method should be implemented by subclasses to process both haptic-specific
+	 * and audio-specific data for creating corresponding haptic feedback effects.
+	 *
+	 * @param HapticsData A vector of unsigned 8-bit integers representing the haptic
+	 *                    data to be processed for generating haptic feedback.
+	 * @param AudioData   A vector of unsigned 8-bit integers representing the audio
+	 *                    data to be used for syncing or enhancing the haptic effects.
 	 */
-	virtual void SendLegacyBTReport(const std::vector<std::int16_t>& AudioData) = 0;
+	virtual void AudioHapticUpdate(const std::vector<std::uint8_t>& HapticsData, const std::vector<std::uint8_t>& AudioData) = 0;
 };
