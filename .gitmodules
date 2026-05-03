@@ -3,4 +3,4 @@
 	url = https://github.com/rafaelvaloto/Gamepad-Core-Tests.git
 [submodule "Libs/miniaudio"]
 	path = Libs/miniaudio
-	url = https://github.com/rafaelvaloto/Gamepad-Core-Audio.git
+	url = https://github.com/mackron/miniaudio.git
