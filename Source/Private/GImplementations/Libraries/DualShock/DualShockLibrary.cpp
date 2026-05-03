@@ -22,7 +22,7 @@ bool FDualShockLibrary::Initialize(const FDeviceContext& Context)
 void FDualShockLibrary::UpdateOutput()
 {
 	FDeviceContext* Context = GetMutableDeviceContext();
-	if (!Context->IsConnected)
+	if (!Context)
 	{
 		return;
 	}
@@ -33,6 +33,10 @@ void FDualShockLibrary::UpdateOutput()
 void FDualShockLibrary::UpdateInput(float /*Delta*/)
 {
 	FDeviceContext* Context = GetMutableDeviceContext();
+	if (!Context)
+	{
+		return;
+	}
 	IPlatformHardware::Get().Read(Context);
 	FInputContext* InputToFill = Context->GetBackBuffer();
 
@@ -103,6 +107,10 @@ void FDualShockLibrary::SetVibration(std::uint8_t LeftRumble, std::uint8_t Right
 void FDualShockLibrary::SetLightbarFlash(DSCoreTypes::FDSColor Color, float BrightnessTime, float ToggleTime)
 {
 	FDeviceContext* Context = GetMutableDeviceContext();
+	if (!Context)
+	{
+		return;
+	}
 	FOutputContext* HidOutput = &Context->Output;
 	HidOutput->Lightbar.R = Color.R;
 	HidOutput->Lightbar.G = Color.G;
