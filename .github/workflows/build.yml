@@ -20,6 +20,21 @@ jobs:
       with:
         submodules: false
 
+    - name: Fetch Tests suite (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        rm -rf "${{github.workspace}}/Tests"
+        git clone --depth 1 --branch main https://github.com/rafaelvaloto/Gamepad-Core-Tests.git "${{github.workspace}}/Tests"
+
+    - name: Fetch Tests suite (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        if (Test-Path "${{github.workspace}}/Tests") {
+          Remove-Item -Recurse -Force "${{github.workspace}}/Tests"
+        }
+        git clone --depth 1 --branch main https://github.com/rafaelvaloto/Gamepad-Core-Tests.git "${{github.workspace}}/Tests"
+
     - name: Install Dependencies (Linux)
       if: runner.os == 'Linux'
       run: |
@@ -27,7 +42,10 @@ jobs:
         sudo apt-get install -y build-essential cmake libasound2-dev libudev-dev libsdl2-dev
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DBUILD_TESTS=OFF -DAUTOMATED_TESTS=ON -DGAMEPAD_CORE_ENABLE_AUDIO=OFF
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DBUILD_TESTS=ON -DAUTOMATED_TESTS=ON -DGAMEPAD_CORE_ENABLE_AUDIO=OFF
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{matrix.build_type}} --target GamepadCore
+      run: cmake --build ${{github.workspace}}/build --config ${{matrix.build_type}} --target test-gamepad-outputs test-gamepad-inputs
+
+    - name: Test (platform logic)
+      run: ctest --test-dir ${{github.workspace}}/build -C ${{matrix.build_type}} --output-on-failure --timeout 60 -R "GamepadOutputs|GamepadInputs"
