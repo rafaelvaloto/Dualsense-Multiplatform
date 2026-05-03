@@ -46,6 +46,9 @@
 
 </div>
 
+> [!IMPORTANT]
+> **API Migration Notice (v1.0.0+):** To improve clarity and architectural separation, gamepad features (Lightbar, Triggers, Haptics, etc.) are now accessed via specialized interfaces. Use the new helper methods (e.g., `GetIGamepadLightbar()`) to retrieve the specific interface before calling its functions.
+
 ---
 
 ### 🚀 What is Dualsense-Multiplatform?
@@ -122,30 +125,32 @@ The Pico W implementation includes **complete support** for all advanced DualSen
 
 ---
 
+### Prerequisites
+
+- **CMake** 3.20 or higher
+- **C++20** compatible compiler (MSVC, GCC, Clang)
+- **Ninja** (recommended) or Make
+ 
 ## 📦 Installation & Submodules
 
 Depending on your project needs, you can clone **Gamepad-Core** in different ways. The library is designed to be modular, allowing you to include only what is necessary for your target environment.
 
 ### 1. 🍃 Minimal Version (Core Only)
-**Ideal for:** Embedded systems (ESP32, Raspberry Pi Pico W, etc.), or projects where resources are extremely limited and audio is not required.
-*   **Features:** Basic HID communication, buttons, sticks, triggers (non-audio), and lightbar.
-*   **Size:** Very small footprint, no external dependencies.
+**Ideal for:** Embedded systems (ESP32, Raspberry Pi Pico W, etc.), OS-level applications, engine integrations, or resource-constrained environments where external audio libraries are not required.
+
+* **Features:** Basic HID communication, buttons, sticks, triggers (feedback/resistance), and lightbar control.
+
+*   **Engine & App Ready:** Designed as a lightweight backend for custom engines (Unreal, Unity via Native C++) or standalone desktop applications.
+
+*   **Size:** Very small footprint with zero external dependencies.
+
+*   **Flexibility:** This core version serves as the foundation for all implementations; you can manually link your own OS-native audio API if needed.
 
 ```bash
 git clone https://github.com/rafaelvaloto/Gamepad-Core.git
 ```
 
-### 2. 🎧 Standard Version (With Audio Support)
-**Ideal for:** OS-level apps, Desktop software, Raspberry Pi, or any system where you want to use **Audio-to-Haptics** features.
-*   **Features:** Everything in Minimal + High-fidelity Haptics and Speaker support via `miniaudio`.
-
-```bash
-git clone https://github.com/rafaelvaloto/Gamepad-Core.git
-cd Gamepad-Core
-git submodule update --init Libs/miniaudio
-```
-
-### 3. 🛠️ Developer Version (Full + Tests)
+### 2. 🛠️ Developer Version (Full + Tests)
 **Ideal for:** Contributors, library development, or if you want to run the integration tests on your hardware.
 *   **Features:** Everything in Standard + the complete Integration Test suite.
 
@@ -166,17 +171,12 @@ git submodule update --init --recursive
 The fastest way to verify Gamepad-Core on your hardware is by running the **Integration Tests**. This requires cloning the repository with all submodules.
 
 ```bash
-# 1. Clone the repository with tests and audio submodules
-git clone --recursive https://github.com/rafaelvaloto/Gamepad-Core.git
-cd Gamepad-Core
-git submodule update --init --recursive
 
-
-# 2. Configure and build
+# Configure and build
 cmake -S . -B cmake-build-release -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
 cmake --build cmake-build-release --target test-gamepad-outputs -j
 
-# 3. Run (make sure your DualSense/DualShock is connected)
+# Run (make sure your DualSense/DualShock is connected)
 ./cmake-build-release/Tests/Integration/test-gamepad-inputs
 ```
 
@@ -233,7 +233,8 @@ The `test-gamepad-outputs` executable allows you to test various controller feed
 ---
 
 ## 🎧 Audio Haptics Integration Test (test-audio-haptics)
-The `test-audio-haptics` demonstrates the high-fidelity Audio Haptics feature. It can play a WAV file or capture system audio, converting it into tactile feedback for the DualSense.
+
+This integration test demonstrates the engine's capability to stream synchronized audio and haptic data using **miniaudio** and **Opus compression**.
 
 **Usage:**
 ```bash
@@ -244,14 +245,19 @@ The `test-audio-haptics` demonstrates the high-fidelity Audio Haptics feature. I
 ./cmake-build-release/Tests/Integration/test-audio-haptics
 ```
 
-**Requirements:**
-- DualSense controller connected via USB or Bluetooth.
-- **USB:** Provides 48kHz high-fidelity haptics.
-- **Bluetooth:** Provides 3000Hz haptics via HID reports.
+## Device Capabilities & Audio Specs
 
-**Supported Modes:**
-- **WAV Playback:** Reads a file and plays it on your default speakers while sending haptics to the controller.
-- **System Audio:** Captures whatever is playing on your computer and converts it to haptics in real-time.
+* **Connection:** DualSense controller supported via USB and Bluetooth.
+* **Bluetooth Streaming:** Now supports Audio + Haptics over Bluetooth using **Opus codec compression** for high-performance, low-latency wireless feedback.
+* **Sample Rates:** Fully compatible with 48kHz, 24kHz, and 16kHz frequencies.
+    * **Default:** 48kHz (can be manually configured in the project settings).
+* **USB Mode:** Provides native high-fidelity 48kHz haptics.
+
+### 1. WAV Playback
+Streams audio to the default system output while simultaneously processing and sending compressed haptic data to the controller.
+
+### 2. System Audio (Loopback)
+Captures real-time system output and converts it into haptic feedback on the fly—perfect for testing with external media or games.
 
 ---
 
@@ -285,6 +291,36 @@ Special thanks to **Epidemic Sound** for providing high-quality royalty-free mus
 
 ---
 
+## Break Changes v1.0.0
+```cpp
+// Scan for connected devices
+Registry->PlugAndPlay(DeltaTime);
+auto* Gamepad = Registry->GetLibrary(0)
+
+if (Gamepad->IsConnected())
+{
+    if (auto* Lightbar = Gamepad->GetIGamepadLightbar())
+    {
+       Lightbar->SetLightbar({0, 255, 0});
+    }
+    
+    if (auto* Trigger = Gamepad->GetIGamepadTrigger())
+    {
+    }
+    
+    // ⚠️ REQUIRED: Update output to apply all changes
+    gamepad->UpdateOutput();
+}
+
+// Available methods for retrieving interfaces.
+IGamepadTouch* GetIGamepadTouch() override { return this; }
+IGamepadTrigger* GetIGamepadTrigger() override { return this; }
+IGamepadHaptics* GetIGamepadHaptics() override { return this; }
+IGamepadLightbar* GetIGamepadLightbar() override { return this; }
+IGamepadRumbles* GetIGamepadRumbles() override { return this; }
+IGamepadSensors* GetIGamepadSensors() override { return this; }
+IGamepadSettings* GetIGamepadSettings() override { return this; }
+```
 
 ## Minimal Example (Standalone C++)
 
@@ -307,7 +343,7 @@ using DeviceRegistry = GamepadCore::TBasicDeviceRegistry<Test_DeviceRegistryPoli
 int main() {
     // Initialize hardware layer
     auto Hardware = std::make_unique<HardwareInfo>();
-    IPlatformHardwareInfo:: SetInstance(std::move(Hardware));
+    IPlatformHardwareInfo::SetInstance(std::move(Hardware));
 
     // Create device registry
     auto Registry = std::make_unique<DeviceRegistry>();
@@ -331,15 +367,16 @@ int main() {
                 
                 if (Input.bCross) {
                     // Trigger haptic feedback
-                    Gamepad->SetLightbar({255, 0, 0});
-                    Gamepad->SetRumble(255, 128);
+                    Gamepad->GetIGamepadLightbar()->SetLightbar({255, 0, 0});
+                    // Apply vibration
+                    Gamepad->GetIGamepadRumbles()->SetRumble(255, 128);
+                    
+                    // ⚠️ REQUIRED: Update output to apply all changes
+                    Gamepad->UpdateOutput();
                 }
                 
                 // Control adaptive triggers
                 if (auto* Trigger = Gamepad->GetIGamepadTrigger()) {
-                    
-                    Trigger->SetGameCube(EDSGamepadHand::AnyHand);
-                    
                     // Example Custom Trigger Bow(0x22)
                     std::vector<uint8_t> BufferTrigger(10);
                     BufferTrigger[0] = 0x22;
@@ -354,8 +391,8 @@ int main() {
                     BufferTrigger[9] = 0x00;
 
                     if (Trigger) {
-                        // Trigger->SetBow22();
                         Trigger->SetCustomTrigger(EDSGamepadHand::Right, BufferTrigger);
+                        Gamepad->UpdateOutput();
                     }
                 }
                 
@@ -366,11 +403,9 @@ int main() {
                 }
             }
         }
-        
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(DeltaTime));
     }
 }
-
 ```
 
 This design makes it trivial to support **custom platforms** (e.g., PlayStation SDK, proprietary embedded systems) without touching core logic.
@@ -441,65 +476,6 @@ Gamepad-Core provides a **complete audio-to-haptics and audio-to-speaker pipelin
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Key Components
-
-#### 1. **GCore** — The Stable Abstraction
-Pure C++ interfaces and templates.  **Completely OS and engine-agnostic.**
-
-Example:
-```cpp
-// Set LED color
-gamepad->SetLightbar(255, 0, 0);
-
-// Set trigger effect
-gamepad->SetResistance(TriggerEffect:: Resistance, ... );
-
-// Apply vibration
-gamepad->SetVibration(0.5f, 0.5f);
-
-// ⚠️ REQUIRED: Update output to apply all changes
-gamepad->UpdateOutput();
-```
-
-#### 2. **GImplementations** — The Hardware Drivers
-Contains the raw HID protocol logic for each controller: 
-- **SonyGamepadAbstract** — Shared logic between DualShock 4 and DualSense
-- **DualSenseLibrary** — Adaptive Triggers, Haptics, LED control
-- **DualShock4Library** — Classic force feedback and lightbar
-
-#### 3. **Platform Policy** — The OS Bridge
-Tells the library **how** to discover and communicate with devices on your platform:
-- **Windows:** Uses `SetupAPI` and `hid.dll`
-- **Linux:** Uses `hidapi` or `libusb`
-- **macOS:** Uses `IOKit`
-- **Custom:** Implement your own for proprietary SDKs
-
----
-
-### Prerequisites
-
-- **CMake** 3.20 or higher
-- **C++20** compatible compiler (MSVC, GCC, Clang)
-- **Ninja** (recommended) or Make
-
-### Build Commands
-
-```bash
-# Configure (Debug)
-cmake -S . -B build/debug -DCMAKE_BUILD_TYPE=Debug
-
-# Configure (Release)
-cmake -S . -B build/release -DCMAKE_BUILD_TYPE=Release
-
-# Compile the library
-cmake --build build/release --target GamepadCore -j
-
-# Run integration tests (hardware required)
-cmake --build build/debug --target test-gamepad-outputs -j
-./build/debug/Tests/Integration/test-gamepad-outputs
-```
-
-
 ## 🤝 Contributing
 
 Contributions are welcome! Whether you want to:
@@ -529,15 +505,14 @@ The foundation of this plugin was built upon the research and code from several 
 * [DualSenseAPI](https://github.com/BadMagic100/DualSenseAPI/tree/master) - Hardware communication references.
 * [flok pydualsense](https://github.com/flok/pydualsense) - Feature report research.
 * [SAxense](https://github.com/egormanga/SAxense) - Base for Bluetooth Audio Haptics.
+* [Awalol/DS5Dongle](https://github.com/awalol/DS5Dongle) - Reference **Bluetooth Audio (Headset/Speaker)** opus codec and buffer sizes.
 * [miniaudio](https://github.com/mackron/miniaudio) - Audio playback and conversion library.
 * [Ryochan7/DS4Windows](https://github.com/Ryochan7/DS4Windows) - Industry standard for DualShock/DualSense on Windows.
 * [linux/drivers/hid/hid-playstation.c](https://github.com/torvalds/linux/blob/master/drivers/hid/hid-playstation.c#L1709) - Reference for calibration, gyroscope, and Linux driver standards.
-* [Awalol/DS5Dongle](https://github.com/awalol/DS5Dongle) - Reference **Bluetooth Audio (Headset/Speaker)** opus codec and buffer sizes.
 
 Special thanks to the community members who helped improve this plugin:
 
 * **[yncat](https://github.com/yncat)**: For the extensive research and implementation logic regarding **USB Audio Haptics**, which was crucial for supporting high-fidelity haptics via USB ([Issue #105](https://github.com/rafaelvaloto/Unreal-Dualsense/issues/105)).
-
 
 ---
 
