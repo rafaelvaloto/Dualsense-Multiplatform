@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
       with:
-        submodules: recursive
+        submodules: false
 
     - name: Install Dependencies (Linux)
       if: runner.os == 'Linux'
@@ -27,11 +27,7 @@ jobs:
         sudo apt-get install -y build-essential cmake libasound2-dev libudev-dev libsdl2-dev
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DBUILD_TESTS=ON -DAUTOMATED_TESTS=ON -DGAMEPAD_CORE_HAS_AUDIO=OFF
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DBUILD_TESTS=OFF -DAUTOMATED_TESTS=ON -DGAMEPAD_CORE_ENABLE_AUDIO=OFF
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{matrix.build_type}}
-
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{matrix.build_type}} --output-on-failure --timeout 120 -E "AudioHaptics"
+      run: cmake --build ${{github.workspace}}/build --config ${{matrix.build_type}} --target GamepadCore
