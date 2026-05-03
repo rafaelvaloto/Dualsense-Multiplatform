@@ -104,8 +104,8 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 
 		DSContext->Output.Feature.VibrationMode = 0xFC;
 		DSContext->Output.Feature.FeatureMode = 0x57;
-		DSContext->Output.Audio.SpeakerVolume = 128;
-		DSContext->Output.Audio.HeadsetVolume = 128;
+		DSContext->Output.Audio.SpeakerVolume = 255;
+		DSContext->Output.Audio.HeadsetVolume = 255;
 		DSContext->Output.Lightbar = {100, 100, 0};
 		UpdateOutput();
 		gc_sync::sleep_ms(50);
@@ -119,10 +119,10 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 		DSContext->BufferHapitcs[3] = 0x07;
 		DSContext->BufferHapitcs[4] = 0xfe;
 		DSContext->BufferHapitcs[5] = 0b11111111; // frequency filters  (?)
-		DSContext->BufferHapitcs[6] = 0b00111111; // ...
-		DSContext->BufferHapitcs[7] = 0b00111111; // ...
+		DSContext->BufferHapitcs[6] = 0b10111111; // ...
+		DSContext->BufferHapitcs[7] = 0b10111111; // ...
 		DSContext->BufferHapitcs[8] = 0b11111111; // ...
-		//DSContext->BufferHapitcs[9] = 0b01001111; // sync times (?)
+		//DSContext->BufferHapitcs[9] = 0b01001000; // sync times (?)
 		DSContext->BufferHapitcs[9] = 0b01000000; // sync times (?)
 		return true;
 	}
@@ -309,6 +309,24 @@ void FDualSenseLibrary::SetMicrophoneLed(EDSMic Led)
 
 void FDualSenseLibrary::AudioHapticUpdate(const std::vector<std::uint8_t>& HapticsData)
 {
+	FDeviceContext* Context = GetMutableDeviceContext();
+	if (!Context || !Context->IsConnected)
+	{
+		return;
+	}
+
+	{
+		gc_lock::lock_guard<gc_lock::mutex> LockGuard(Context->AudioMutex);
+		unsigned char* Audio = &Context->BufferHapitcs[0];
+		Audio[10] = (AudioVibrationSequence++) & 0xFF;
+		Audio[11] = 0x92;
+		Audio[12] = 0x40;
+		if (!HapticsData.empty())
+		{
+			std::memcpy(&Audio[13], HapticsData.data(), HapticsData.size());
+		}
+		FGamepadOutput::SendAudioHapticAdvanced(Context, 394);
+	}
 }
 
 void FDualSenseLibrary::AudioHapticUpdate(const std::vector<std::uint8_t>& HapticsData, const std::vector<std::uint8_t>& AudioData)
