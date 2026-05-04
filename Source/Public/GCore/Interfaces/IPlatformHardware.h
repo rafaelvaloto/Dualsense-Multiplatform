@@ -144,10 +144,6 @@ public:
 	 * feedback.
 	 */
 	virtual void ProcessAudioHaptic(FDeviceContext* Context) = 0;
-	virtual void ProcessAudioHaptic(FDeviceContext* Context, const std::vector<std::int16_t>& AudioData) = 0;
-	virtual void InitializeAudioDevice(FDeviceContext* Context) = 0;
-	virtual class IGamepadBase* GetLibrary(uint32_t EngineDeviceId) = 0;
-	virtual void SetRegistry(class IDeviceRegistry* InRegistry) = 0;
 	/**
 	 * Default constructor for the IIPlatformHardwareInfo.
 	 *

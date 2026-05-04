@@ -69,26 +69,6 @@ namespace GamepadCore
 			Policy.ProcessAudioHaptic(Context);
 		}
 
-		void ProcessAudioHaptic(FDeviceContext* Context, const std::vector<std::int16_t>& AudioData) override
-		{
-			Policy.ProcessAudioHaptic(Context, AudioData);
-		}
-
-		void InitializeAudioDevice(FDeviceContext* Context) override
-		{
-			Policy.InitializeAudioDevice(Context);
-		}
-
-		class IGamepadBase* GetLibrary(uint32_t EngineDeviceId) override
-		{
-			return Policy.GetLibrary(EngineDeviceId);
-		}
-
-		void SetRegistry(class IDeviceRegistry* InRegistry) override
-		{
-			Policy.SetRegistry(InRegistry);
-		}
-
 		THardwarePolicy& GetPolicy() { return Policy; }
 	};
 } // namespace GamepadCore
