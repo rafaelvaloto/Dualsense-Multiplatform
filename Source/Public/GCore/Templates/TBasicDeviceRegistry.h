@@ -88,7 +88,7 @@ namespace GamepadCore
 			}
 		}
 
-		IGamepadBase* GetLibrary(EngineIdType DeviceId) override
+		IGamepadBase* GetLibrary(EngineIdType DeviceId)
 		{
 			if (LibraryInstances.contains(DeviceId))
 			{
