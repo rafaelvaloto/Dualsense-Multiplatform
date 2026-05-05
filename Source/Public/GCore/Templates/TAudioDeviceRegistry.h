@@ -9,19 +9,18 @@
 namespace GamepadCore
 {
 	template<typename T>
-	concept AudioDevicePolicy = requires(T t, typename T::DevicePathType path, typename T::AudioDeviceType audioDevice, typename T::AudioDeviceIdType audioDeviceId, typename T::AudioRingBufferType audioRingBuffer, typename T::AudioFrameCountType frameCount) {
+	concept AudioDevicePolicy = requires(T t, typename T::DevicePathType path, typename T::AudioDeviceType audioDevice, typename T::AudioDeviceIdType audioDeviceId, typename T::AudioRingBufferType audioRingBuffer, typename T::AudioFrameCountType frameCount, typename T::ContextType ctx) {
 		typename T::DevicePathType;
 		typename T::AudioDeviceType;
 		typename T::AudioDeviceIdType;
 		typename T::AudioRingBufferType;
 		typename T::AudioFrameCountType;
+		typename T::ContextType;
 
 		{ t.Close() } -> std::same_as<void>;
 		{ t.IsValid() } -> std::same_as<bool>;
-		{ t.Initialize() } -> std::same_as<bool>;
+		{ t.InitializeAudioContainer(ctx) } -> std::same_as<bool>;
 		{ t.InitializeWithDeviceId(audioDeviceId) } -> std::same_as<bool>;
-		{ t.UnregisterAudioDevice(path) } -> std::same_as<void>;
-		{ t.GetAvailableWriteFrames() } -> std::same_as<typename T::AudioFrameCountType>;
 		{ t.WriteHapticData(std::declval<const std::vector<std::int16_t>&>()) } -> std::same_as<bool>;
 	};
 
@@ -35,6 +34,7 @@ namespace GamepadCore
 
 		// EngineId Device type
 		using DevicePathType = typename AudioDevicePolicy::DevicePathType;
+		using ContextType = typename AudioDevicePolicy::ContextType;
 
 		// Audio Container types
 		using AudioDeviceType = typename AudioDevicePolicy::AudioDeviceType;
@@ -44,7 +44,7 @@ namespace GamepadCore
 
 		void Close()
 		{
-			Policy.clear();
+			Policy.Close();
 		}
 
 		[[nodiscard]] bool IsValid() const
@@ -52,9 +52,9 @@ namespace GamepadCore
 			return Policy.IsValid();
 		}
 
-		bool Initialize(int InSampleRate = 48000, int InNumChannels = 4)
+		bool InitializeAudioContainer(ContextType* Context)
 		{
-			return Policy.Initialize(InSampleRate, InNumChannels);
+			return Policy.InitializeAudioContainer(Context);
 		}
 
 		bool InitializeWithDeviceId(const AudioDeviceIdType* pDeviceId, int InSampleRate = 48000, int InNumChannels = 4)
@@ -67,25 +67,6 @@ namespace GamepadCore
 			Policy.WriteHapticData(vector);
 		}
 
-		void ProcessAudioHaptic(const std::vector<std::int16_t>& AudioData)
-		{
-			Policy.WriteHapticData(AudioData);
-		}
-
-		void ProcessAudioHaptic(FDeviceContext* Context, const std::vector<std::int16_t>& AudioData)
-		{
-			Policy.ProcessAudioHaptic(Context, AudioData);
-		}
-
-		void RegisterAudioDevice(DevicePathType EngineId, const AudioDeviceIdType* id = nullptr)
-		{
-			Policy.RegisterAudioDevice(EngineId, id);
-		}
-
-		void UnregisterAudioDevice(DevicePathType EngineId)
-		{
-			Policy.UnregisterAudioDevice(EngineId);
-		}
 	};
 }
 
