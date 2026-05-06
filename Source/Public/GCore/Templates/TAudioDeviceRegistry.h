@@ -66,7 +66,5 @@ namespace GamepadCore
 		{
 			Policy.WriteHapticData(vector);
 		}
-
 	};
-}
-
+} // namespace GamepadCore

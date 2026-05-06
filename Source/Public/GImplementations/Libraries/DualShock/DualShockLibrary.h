@@ -7,10 +7,10 @@
 #include "GImplementations/Libraries/Base/GamepadBase.h"
 
 class FDualShockLibrary : public GamepadBase,
-						  public IGamepadRumbles,
-						  public IGamepadLightbar,
-						  public IGamepadSensors,
-						  public IGamepadTouch
+                          public IGamepadRumbles,
+                          public IGamepadLightbar,
+                          public IGamepadSensors,
+                          public IGamepadTouch
 {
 
 public:

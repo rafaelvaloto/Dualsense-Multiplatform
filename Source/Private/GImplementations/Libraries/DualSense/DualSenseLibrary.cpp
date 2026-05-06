@@ -5,9 +5,6 @@
 
 #include "GImplementations/Libraries/DualSense/DualSenseLibrary.h"
 #include "GCore/Interfaces/IAudioDevice.h"
-#include <algorithm>
-#include <iostream>
-#include <iomanip>
 #include "GCore/Interfaces/IPlatformHardware.h"
 #include "GCore/Types/ECoreGamepad.h"
 #include "GCore/Types/Structs/Context/DeviceContext.h"
@@ -18,6 +15,9 @@
 #include "GImplementations/Utils/GamepadSensors.h"
 #include "GImplementations/Utils/GamepadTouch.h"
 #include "GImplementations/Utils/GamepadTrigger.h"
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
 
 using namespace FDualSenseTriggerComposer;
 
@@ -128,7 +128,7 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 		DSContext->BufferHapitcs[7] = 0b11111111; // ...
 		DSContext->BufferHapitcs[8] = 0b11111111; // ...
 		DSContext->BufferHapitcs[9] = 0b00111111; // sync times (?)
-		//DSContext->BufferHapitcs[9] = 0b01000000; // sync times (?)
+		// DSContext->BufferHapitcs[9] = 0b01000000; // sync times (?)
 		return true;
 	}
 
