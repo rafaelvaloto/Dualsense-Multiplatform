@@ -267,22 +267,35 @@ Captures real-time system output and converts it into haptic feedback on the fly
 
 ---
 
-## 🎛️ Multi-Channel Haptics Test (test-channels-haptics)
-The `test-channels-haptics` allows testing multiple controllers simultaneously with independent audio sources for haptics.
+[//]: # ()
+[//]: # (## 🎛️ Multi-Channel Haptics Test &#40;test-channels-haptics&#41;)
 
-**Usage:**
-```bash
-# Assign different WAV files to different gamepads (using relative paths)
-./cmake-build-release/Tests/Integration/test-channels-haptics "Tests/Integration/Datasets/ES_Touch_SCENE.wav" "Tests/Integration/Datasets/ES_Replay_Lawd_Ito.wav"
+[//]: # (The `test-channels-haptics` allows testing multiple controllers simultaneously with independent audio sources for haptics.)
 
-# If more controllers are connected than files provided, the last file is repeated.
-# If no file is provided, it defaults to System Audio Loopback for all controllers.
-```
+[//]: # ()
+[//]: # (**Usage:**)
 
-**Features:**
-- **Independent Channels:** Gamepad 1 gets the first WAV, Gamepad 2 gets the second, and so on.
-- **Automatic Assignment:** Automatically detects connected gamepads and starts a dedicated audio worker for each.
-- **Hot-Swap Support:** New controllers connected during the test will automatically start receiving haptic feedback.
+[//]: # (```bash)
+
+[//]: # (# Assign different WAV files to different gamepads &#40;using relative paths&#41;)
+
+[//]: # (./cmake-build-release/Tests/Integration/test-channels-haptics "Tests/Integration/Datasets/ES_Touch_SCENE.wav" "Tests/Integration/Datasets/ES_Replay_Lawd_Ito.wav")
+
+[//]: # ()
+[//]: # (# If more controllers are connected than files provided, the last file is repeated.)
+
+[//]: # (# If no file is provided, it defaults to System Audio Loopback for all controllers.)
+
+[//]: # (```)
+
+[//]: # ()
+[//]: # (**Features:**)
+
+[//]: # (- **Independent Channels:** Gamepad 1 gets the first WAV, Gamepad 2 gets the second, and so on.)
+
+[//]: # (- **Automatic Assignment:** Automatically detects connected gamepads and starts a dedicated audio worker for each.)
+
+[//]: # (- **Hot-Swap Support:** New controllers connected during the test will automatically start receiving haptic feedback.)
 
 ### 🎵 Music Credits
 Special thanks to **Epidemic Sound** for providing high-quality royalty-free music for testing:
