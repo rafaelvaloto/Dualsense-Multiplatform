@@ -24,6 +24,4 @@ public:
 	 * @param TriggerReduce Adjusts the intensity reduction for the trigger effect.
 	 */
 	virtual void DualSenseSettings(std::uint8_t bIsMic, std::uint8_t bIsHeadset, std::uint8_t bIsSpeaker, std::uint8_t MicVolume, std::uint8_t AudioVolume, std::uint8_t RumbleMode, std::uint8_t RumbleReduce, std::uint8_t TriggerReduce) = 0;
-
 };
-

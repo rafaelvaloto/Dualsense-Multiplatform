@@ -244,9 +244,9 @@ public:
 	 * the galloping effect.
 	 */
 	void SetGalloping23(std::uint8_t StartPosition,
-	                            std::uint8_t EndPosition, std::uint8_t FirstFoot,
-	                            std::uint8_t SecondFoot, std::uint8_t Frequency,
-	                            const EDSGamepadHand& Hand) override;
+	                    std::uint8_t EndPosition, std::uint8_t FirstFoot,
+	                    std::uint8_t SecondFoot, std::uint8_t Frequency,
+	                    const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Configures the trigger effect for the DualSense controller's
 	 * adaptive triggers.
@@ -266,8 +266,8 @@ public:
 	 * configuration applies to.
 	 */
 	void SetWeapon25(std::uint8_t StartZone, std::uint8_t Amplitude,
-	                         std::uint8_t Behavior, std::uint8_t Trigger,
-	                         const EDSGamepadHand& Hand) override;
+	                 std::uint8_t Behavior, std::uint8_t Trigger,
+	                 const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Configures the machine gun effect on a DualSense controller.
 	 *
@@ -292,8 +292,8 @@ public:
 	 * the effect.
 	 */
 	void SetMachineGun26(std::uint8_t StartZone, std::uint8_t Behavior,
-	                             std::uint8_t Amplitude, std::uint8_t Frequency,
-	                             const EDSGamepadHand& Hand) override;
+	                     std::uint8_t Amplitude, std::uint8_t Frequency,
+	                     const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Configures the advanced machine effect (Mode 0x27) for DualSense
 	 * controller triggers.
@@ -320,9 +320,9 @@ public:
 	 * applying the trigger effect.
 	 */
 	void SetMachine27(std::uint8_t StartZone, std::uint8_t BehaviorFlag,
-	                          std::uint8_t Force, std::uint8_t Amplitude,
-	                          std::uint8_t Period, std::uint8_t Frequency,
-	                          const EDSGamepadHand& Hand) override;
+	                  std::uint8_t Force, std::uint8_t Amplitude,
+	                  std::uint8_t Period, std::uint8_t Frequency,
+	                  const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Sets custom trigger behavior for the specified controller hand using
 	 * custom hexadecimal byte data.

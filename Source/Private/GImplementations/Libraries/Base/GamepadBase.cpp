@@ -3,8 +3,8 @@
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
 
-#include "GCore/Interfaces/IPlatformHardware.h"
 #include "GImplementations/Libraries/Base/GamepadBase.h"
+#include "GCore/Interfaces/IPlatformHardware.h"
 
 void GamepadBase::ShutdownLibrary()
 {
