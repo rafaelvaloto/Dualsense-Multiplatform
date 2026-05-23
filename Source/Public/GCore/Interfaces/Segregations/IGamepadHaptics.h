@@ -1,10 +1,10 @@
-// Copyright (c) 2025 Rafael Valoto. All Rights Reserved.
+// Copyright (c) 2026 Rafael Valoto. All Rights Reserved.
 // Project: GamepadCore
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
 #pragma once
-#include <vector>
 #include <cstdint>
+#include <vector>
 
 /**
  *
@@ -38,7 +38,7 @@ public:
 	 *                  to be processed to create corresponding multiChannel haptic
 	 *                  feedback effects.
 	 */
-	virtual void AudioHapticUpdate(const std::vector<std::int16_t>& AudioData) = 0;
+	virtual void AudioHapticUpdate(const std::vector<float>& AudioData) = 0;
 
 	/**
 	 * Updates the audio haptic feedback using the provided haptic and audio data.

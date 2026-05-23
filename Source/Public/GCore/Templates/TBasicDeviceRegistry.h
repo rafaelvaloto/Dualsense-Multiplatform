@@ -1,6 +1,6 @@
-// Copyright (c) 2025 Rafael Valoto/Publisher. All rights reserved.
+// Copyright (c) 2026 Rafael Valoto. All rights reserved.
 // Created for: GamepadCore - Plugin to support DualSense controller on Windows.
-// Planned Release Year: 2025
+// Planned Release Year: 2026
 #pragma once
 #include "GCore/Interfaces/IAudioDevice.h"
 #include "GCore/Interfaces/IDeviceRegistry.h"

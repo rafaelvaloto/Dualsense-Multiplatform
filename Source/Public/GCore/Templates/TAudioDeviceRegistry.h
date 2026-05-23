@@ -1,6 +1,6 @@
-﻿// Copyright (c) 2025 Rafael Valoto/Publisher. All rights reserved.
+// Copyright (c) 2026 Rafael Valoto. All rights reserved.
 // Created for: GamepadCore - Plugin to support DualSense controller on Windows.
-// Planned Release Year: 2025
+// Planned Release Year: 2026
 #pragma once
 #include "GCore/Interfaces/IAudioDevice.h"
 #include <ranges>
@@ -21,14 +21,14 @@ namespace GamepadCore
 		{ t.IsValid() } -> std::same_as<bool>;
 		{ t.InitializeAudioContainer(ctx) } -> std::same_as<bool>;
 		{ t.InitializeWithDeviceId(audioDeviceId) } -> std::same_as<bool>;
-		{ t.WriteHapticData(std::declval<const std::vector<std::int16_t>&>()) } -> std::same_as<bool>;
+		{ t.WriteHapticData(std::declval<const std::vector<float>&>()) } -> std::same_as<bool>;
 	};
 
 	template<typename AudioDevicePolicy>
 	class TAudioDeviceRegistry
 	{
 	public:
-		~TAudioDeviceRegistry() = default;
+		virtual ~TAudioDeviceRegistry() = default;
 
 		AudioDevicePolicy Policy;
 
@@ -62,11 +62,9 @@ namespace GamepadCore
 			return Policy.InitializeWithDeviceId(pDeviceId, InSampleRate, InNumChannels);
 		}
 
-		void WriteHapticData(const std::vector<std::int16_t>& vector)
+		void WriteHapticData(const std::vector<float>& vector)
 		{
 			Policy.WriteHapticData(vector);
 		}
-
 	};
-}
-
+} // namespace GamepadCore

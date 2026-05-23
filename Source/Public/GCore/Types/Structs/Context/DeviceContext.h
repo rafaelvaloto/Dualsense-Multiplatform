@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Rafael Valoto. All Rights Reserved.
+// Copyright (c) 2026 Rafael Valoto. All Rights Reserved.
 // Project: GamepadCore
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
@@ -6,10 +6,9 @@
 #include "../../DSCoreTypes.h"
 #include "../../ECoreGamepad.h"
 #include "../Config/GamepadCalibration.h"
-//#include "AudioContext.h"
+#include "GCore/Utils/SoDefines.h"
 #include "InputContext.h"
 #include "OutputContext.h"
-#include "GCore/Utils/SoDefines.h"
 
 using FPlatformDeviceHandle = void*;
 #define INVALID_PLATFORM_HANDLE nullptr
@@ -222,9 +221,9 @@ struct FDeviceContext
 	 * essential for maintaining data consistency and avoiding concurrent
 	 * modification issues.
 	 */
- mutable gc_lock::mutex InputMutex;
- mutable gc_lock::mutex OutputMutex;
- mutable gc_lock::mutex AudioMutex;
+	mutable gc_lock::mutex InputMutex;
+	mutable gc_lock::mutex OutputMutex;
+	mutable gc_lock::mutex AudioMutex;
 
 	unsigned char* GetRawOutputBuffer() { return BufferOutput; }
 

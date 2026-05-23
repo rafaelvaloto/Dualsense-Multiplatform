@@ -1,16 +1,16 @@
-// Copyright (c) 2025 Rafael Valoto/Publisher. All rights reserved.
+// Copyright (c) 2026 Rafael Valoto. All rights reserved.
 // Created for: WindowsDualShock_ds5w - Plugin to support DualShock controller
-// on Windows. Planned Release Year: 2025
+// on Windows. Planned Release Year: 2026
 #pragma once
 #include "GCore/Types/DSCoreTypes.h"
 #include "GCore/Types/Structs/Context/DeviceContext.h"
 #include "GImplementations/Libraries/Base/GamepadBase.h"
 
 class FDualShockLibrary : public GamepadBase,
-						  public IGamepadRumbles,
-						  public IGamepadLightbar,
-						  public IGamepadSensors,
-						  public IGamepadTouch
+                          public IGamepadRumbles,
+                          public IGamepadLightbar,
+                          public IGamepadSensors,
+                          public IGamepadTouch
 {
 
 public:

@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2025 Rafael Valoto. All Rights Reserved.
+// Copyright (c) 2026 Rafael Valoto. All Rights Reserved.
 // Project: GamepadCore
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
@@ -9,7 +9,6 @@
 #include "GCore/Types/Structs/Context/DeviceContext.h"
 #include "GCore/Utils/CR32.h"
 #include "GCore/Utils/SoDefines.h"
-#include <iostream>
 
 void FGamepadOutput::OutputDualShock(FDeviceContext* DeviceContext)
 {
@@ -76,12 +75,21 @@ void FGamepadOutput::OutputDualSense(FDeviceContext* DeviceContext)
 	}
 	else
 	{
-		MutableBuffer[40] = 0x07;
+		MutableBuffer[40] ^= 0x01;
 	}
-
+	
+	uint8_t AudioMode = 0b00000010; // Headset
+	if (HidOut->Audio.Mode == 1)
+	{
+		AudioMode = 0b00110000; // Speaker
+	}
+	else if (HidOut->Audio.Mode == 2)
+	{
+		AudioMode = 0b00100010; // Headset + Speaker
+	}
+		
 	{
 		gc_lock::lock_guard<gc_lock::mutex> LockGuard(DeviceContext->OutputMutex);
-
 		unsigned char* Output = &MutableBuffer[Padding];
 		Output[0] = HidOut->Feature.VibrationMode;
 		Output[1] = HidOut->Feature.FeatureMode;
@@ -90,9 +98,10 @@ void FGamepadOutput::OutputDualSense(FDeviceContext* DeviceContext)
 		Output[4] = HidOut->Audio.HeadsetVolume;
 		Output[5] = HidOut->Audio.SpeakerVolume;
 		Output[6] = HidOut->Audio.MicVolume;
-		Output[7] = HidOut->Audio.Mode;
-		Output[9] = HidOut->Audio.MicStatus == 1 ? 0x10 : 0x00;
-		Output[8] = HidOut->Audio.MicStatus == 1 ? 0x01 : 0x00;
+		Output[7] = AudioMode;
+		Output[9] = HidOut->Audio.MicStatus == 0 ? 0x10 : 0x00;
+		Output[8] = HidOut->Audio.MicStatus == 0 ? 0x01 : 0x00;
+		Output[9] = 0x00;
 		Output[36] = (HidOut->Feature.TriggerSoftnessLevel << 4) | (HidOut->Feature.SoftRumbleReduce & 0x0F);
 		Output[42] = HidOut->PlayerLed.Brightness;
 		Output[43] = HidOut->PlayerLed.Led;

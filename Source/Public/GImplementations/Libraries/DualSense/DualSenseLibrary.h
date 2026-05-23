@@ -1,4 +1,4 @@
-﻿// Copyright (c) 2025 Rafael Valoto. All Rights Reserved.
+﻿// Copyright (c) 2026 Rafael Valoto. All Rights Reserved.
 // Project: GamepadCore
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
@@ -46,8 +46,9 @@ class FDualSenseLibrary : public GamepadBase,
 
 public:
 	FDualSenseLibrary()
-	    : AudioVibrationSequence(0)
-	{}
+		: AudioVibrationSequence(0), AudioSequence(0)
+	{
+	}
 
 	/**
 	 * @brief Retrieves the current gamepad trigger implementation.
@@ -124,8 +125,8 @@ public:
 	 * @param bIsMic Indicates whether the microphone is enabled (1) or disabled (0).
 	 * @param bIsHeadset Indicates whether the headset is connected (1) or not (0).
 	 * @param bIsSpeaker Indicates whether the speaker is enabled (1) or disabled (0).
-	 * @param MicVolume Specifies the microphone volume level (0–255).
-	 * @param AudioVolume Specifies the audio volume level for the headset or speaker (0–255).
+	 * @param MicVolume Specifies the microphone volume level (0�255).
+	 * @param AudioVolume Specifies the audio volume level for the headset or speaker (0�255).
 	 * @param RumbleMode Configures the rumble/vibration mode (value range is implementation-specific).
 	 * @param RumbleReduce Reduces the intensity of the rumble effect (value range is implementation-specific).
 	 * @param TriggerReduce Adjusts the sensitivity of the adaptive triggers (value range is implementation-specific).
@@ -244,9 +245,9 @@ public:
 	 * the galloping effect.
 	 */
 	void SetGalloping23(std::uint8_t StartPosition,
-	                            std::uint8_t EndPosition, std::uint8_t FirstFoot,
-	                            std::uint8_t SecondFoot, std::uint8_t Frequency,
-	                            const EDSGamepadHand& Hand) override;
+	                    std::uint8_t EndPosition, std::uint8_t FirstFoot,
+	                    std::uint8_t SecondFoot, std::uint8_t Frequency,
+	                    const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Configures the trigger effect for the DualSense controller's
 	 * adaptive triggers.
@@ -266,8 +267,8 @@ public:
 	 * configuration applies to.
 	 */
 	void SetWeapon25(std::uint8_t StartZone, std::uint8_t Amplitude,
-	                         std::uint8_t Behavior, std::uint8_t Trigger,
-	                         const EDSGamepadHand& Hand) override;
+	                 std::uint8_t Behavior, std::uint8_t Trigger,
+	                 const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Configures the machine gun effect on a DualSense controller.
 	 *
@@ -292,8 +293,8 @@ public:
 	 * the effect.
 	 */
 	void SetMachineGun26(std::uint8_t StartZone, std::uint8_t Behavior,
-	                             std::uint8_t Amplitude, std::uint8_t Frequency,
-	                             const EDSGamepadHand& Hand) override;
+	                     std::uint8_t Amplitude, std::uint8_t Frequency,
+	                     const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Configures the advanced machine effect (Mode 0x27) for DualSense
 	 * controller triggers.
@@ -320,9 +321,9 @@ public:
 	 * applying the trigger effect.
 	 */
 	void SetMachine27(std::uint8_t StartZone, std::uint8_t BehaviorFlag,
-	                          std::uint8_t Force, std::uint8_t Amplitude,
-	                          std::uint8_t Period, std::uint8_t Frequency,
-	                          const EDSGamepadHand& Hand) override;
+	                  std::uint8_t Force, std::uint8_t Amplitude,
+	                  std::uint8_t Period, std::uint8_t Frequency,
+	                  const EDSGamepadHand& Hand) override;
 	/**
 	 * @brief Sets custom trigger behavior for the specified controller hand using
 	 * custom hexadecimal byte data.
@@ -436,11 +437,11 @@ public:
 	 * to the device's haptic feedback system, allowing synchronization of tactile
 	 * sensations with audio output.
 	 *
-	 * @param AudioData A vector containing audio sample data represented as 16-bit
+	 * @param AudioData A vector containing audio sample data represented as float
 	 * signed integers. These samples will be used to generate haptic feedback on
 	 * the DualSense controller.
 	 */
-	void AudioHapticUpdate(const std::vector<std::int16_t>& AudioData) override;
+	void AudioHapticUpdate(const std::vector<float>& AudioData) override;
 
 	// IGamepadSensors implementation
 	void ResetGyroOrientation() override

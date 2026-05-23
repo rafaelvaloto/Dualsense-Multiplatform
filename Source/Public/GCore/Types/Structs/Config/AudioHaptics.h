@@ -1,4 +1,4 @@
-// Copyright (c) 2025 Rafael Valoto. All Rights Reserved.
+// Copyright (c) 2026 Rafael Valoto. All Rights Reserved.
 // Project: GamepadCore
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
@@ -51,7 +51,7 @@ struct FAudioHaptics
 	 * This variable is primarily used in device output configurations for
 	 * transmitting audio-related settings to a DualSense controller.
 	 */
-	std::uint8_t HeadsetVolume = 0x7C;
+	std::uint8_t HeadsetVolume = 0x7F;
 	/**
 	 * Represents the volume level of the speaker output for a DualSense device.
 	 *
@@ -70,7 +70,7 @@ struct FAudioHaptics
 	 * Used during DualSense Devices configuration and in HID report processing to
 	 * adjust the speaker's output level.
 	 */
-	std::uint8_t SpeakerVolume = 0x7C;
+	std::uint8_t SpeakerVolume = 100;
 	/**
 	 * MicVolume is an 8-bit unsigned integer that represents the microphone
 	 * volume level in an audio configuration. It is primarily used within the

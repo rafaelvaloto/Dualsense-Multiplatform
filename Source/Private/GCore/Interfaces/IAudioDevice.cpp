@@ -1,14 +1,20 @@
-﻿#include "GCore/Interfaces/IAudioDevice.h"
+// Copyright (c) 2026 Rafael Valoto. All rights reserved.
+// Created for: GamepadCore - Plugin to support DualSense controller on Windows.
+// Planned Release Year: 2026
+
+#include "GCore/Interfaces/IAudioDevice.h"
 #include <stdexcept>
 
-static IAudioDevice* AudioDeviceInstance = nullptr;
-
-IAudioDevice& IAudioDevice::Get()
+namespace GCAudio
 {
-	return *AudioDeviceInstance;
-}
+	std::unique_ptr<IAudioDevice> IAudioDevice::AudioDeviceInstance = nullptr;
+	IAudioDevice& IAudioDevice::Get()
+	{
+		return *AudioDeviceInstance;
+	}
 
-void IAudioDevice::SetInstance(IAudioDevice* InInstance)
-{
-	AudioDeviceInstance = InInstance;
-}
+	void IAudioDevice::SetInstance(std::unique_ptr<IAudioDevice> InInstance)
+	{
+		AudioDeviceInstance = std::move(InInstance);
+	}
+} // namespace GCAudio

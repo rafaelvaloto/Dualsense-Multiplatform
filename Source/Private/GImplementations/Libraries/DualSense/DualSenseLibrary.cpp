@@ -1,13 +1,10 @@
-﻿// Copyright (c) 2025 Rafael Valoto. All Rights Reserved.
+// Copyright (c) 2026 Rafael Valoto. All Rights Reserved.
 // Project: GamepadCore
 // Description: Cross-platform library for DualSense and generic gamepad input support.
 // Targets: Windows, Linux, macOS.
 
 #include "GImplementations/Libraries/DualSense/DualSenseLibrary.h"
 #include "GCore/Interfaces/IAudioDevice.h"
-#include <algorithm>
-#include <iostream>
-#include <iomanip>
 #include "GCore/Interfaces/IPlatformHardware.h"
 #include "GCore/Types/ECoreGamepad.h"
 #include "GCore/Types/Structs/Context/DeviceContext.h"
@@ -47,12 +44,9 @@ void FDualSenseLibrary::ResetLights()
 	}
 
 	FOutputContext* HidOutput = &Context->Output;
-	if (HidOutput->Lightbar.G == 0 && HidOutput->Lightbar.B == 0 &&
-	    HidOutput->Lightbar.R == 0)
-	{
-		HidOutput->Lightbar.B = 255;
-	}
-
+	HidOutput->Lightbar.R = 0;
+	HidOutput->Lightbar.G = 0;
+	HidOutput->Lightbar.B = 255;
 	HidOutput->PlayerLed.Led = static_cast<unsigned char>(EDSPlayer::One);
 }
 
@@ -108,14 +102,12 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 			}
 
 			IPlatformHardware::Get().Write(DSContext);
-			gc_sync::sleep_ms(50);
 		}
 
 		DSContext->Output.Feature.VibrationMode = 0xFF;
 		DSContext->Output.Feature.FeatureMode = 0x57;
-		DSContext->Output.Lightbar = {100, 100, 0};
+		DSContext->Output.Lightbar = {0, 0, 255};
 		UpdateOutput();
-		gc_sync::sleep_ms(50);
 
 		// Audio haptics bluetooth
 		DSContext->BufferHapitcs[0] = 0x36;
@@ -128,13 +120,11 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 		DSContext->BufferHapitcs[7] = 0b11111111; // ...
 		DSContext->BufferHapitcs[8] = 0b11111111; // ...
 		DSContext->BufferHapitcs[9] = 0b00111111; // sync times (?)
-		//DSContext->BufferHapitcs[9] = 0b01000000; // sync times (?)
+		// DSContext->BufferHapitcs[9] = 0b01000000; // sync times (?)
 		return true;
 	}
-
+	
 	ResetLights();
-	constexpr std::uint8_t FeatureMode = 0x57;
-	DSContext->Output.Feature = {FeatureMode, 0xFF, 0x00, 0x00};
 	UpdateOutput();
 	return true;
 }
@@ -197,17 +187,16 @@ void FDualSenseLibrary::DualSenseSettings(std::uint8_t bIsMic, std::uint8_t bIsH
 	Context->Output.Audio.HeadsetVolume = AudioVolume;
 	Context->Output.Audio.SpeakerVolume = AudioVolume;
 
-	Context->Output.Audio.Mode = 0x05;
-	if (bIsHeadset == 1 && bIsSpeaker == 1)
+	Context->Output.Audio.Mode = 0;
+	if (bIsHeadset == 0 && bIsSpeaker == 1)
 	{
-		Context->Output.Audio.Mode = 0x21;
+		Context->Output.Audio.Mode = 1;
 	}
-	else if (bIsHeadset == 0 && bIsSpeaker == 1)
+	else if (bIsHeadset == 1 && bIsSpeaker == 1)
 	{
-		Context->Output.Audio.Mode = 0x31;
+		Context->Output.Audio.Mode = 2;
 	}
-
-	Context->Output.Feature = {Context->Output.Feature.FeatureMode, RumbleMode, RumbleReduce, TriggerReduce};
+	Context->Output.Feature.VibrationMode = RumbleMode == 255 ? 0xFF : 0xFC;
 }
 
 void FDualSenseLibrary::UpdateOutput()
@@ -400,25 +389,25 @@ void FDualSenseLibrary::AudioHapticUpdate(const std::vector<std::uint8_t>& Hapti
 		Audio[11] = 0x92;
 		Audio[12] = 0x40;
 		Audio[77] = 0x95;
-		Audio[78] = AudioData.size();
+		Audio[78] = std::min(AudioData.size(), static_cast<size_t>(200));
 		if (!HapticsData.empty())
 		{
-			std::memcpy(&Audio[13], HapticsData.data(), HapticsData.size());
+			std::memcpy(&Audio[13], HapticsData.data(), std::min(HapticsData.size(), static_cast<size_t>(64)));
 		}
 		if (!AudioData.empty())
 		{
-			std::memcpy(&Audio[79], AudioData.data(), AudioData.size());
+			std::memcpy(&Audio[79], AudioData.data(), std::min(AudioData.size(), static_cast<size_t>(200)));
 		}
 		FGamepadOutput::SendAudioHapticAdvanced(Context, 394);
 	}
 }
 
-void FDualSenseLibrary::AudioHapticUpdate(const std::vector<std::int16_t>& AudioData)
+void FDualSenseLibrary::AudioHapticUpdate(const std::vector<float>& AudioData)
 {
 	FDeviceContext* Context = GetMutableDeviceContext();
 	if (!Context || !Context->IsConnected)
 	{
 		return;
 	}
-	IAudioDevice::Get().ProcessAudioHaptic(Context, AudioData);
+	GCAudio::IAudioDevice::Get().ProcessAudioHaptic(Context, AudioData);
 }
