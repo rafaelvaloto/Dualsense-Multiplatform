@@ -46,6 +46,11 @@
 
 </div>
 
+### Bluetooth Audio Implementation Example
+**Audio Bluetooth:** [Watch the video here](https://youtu.be/JJFxJJESFUo?si=TlucVlhuunGG99Id)
+
+---
+
 > [!IMPORTANT]
 > **API Migration Notice (v1.0.0+):** To improve clarity and architectural separation, gamepad features (Lightbar, Triggers, Haptics, etc.) are now accessed via specialized interfaces. 
 > Use the new helper methods (e.g., `GetIGamepadLightbar()`) to retrieve the specific interface before calling its functions.
