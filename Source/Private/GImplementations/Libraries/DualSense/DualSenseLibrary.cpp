@@ -15,6 +15,9 @@
 #include "GImplementations/Utils/GamepadSensors.h"
 #include "GImplementations/Utils/GamepadTouch.h"
 #include "GImplementations/Utils/GamepadTrigger.h"
+#include <algorithm>
+#include <iomanip>
+#include <iostream>
 
 using namespace FDualSenseTriggerComposer;
 
