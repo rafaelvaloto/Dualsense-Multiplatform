@@ -45,7 +45,7 @@
 [Features](#-features) • [Examples](#-implementations--integrations) • [Installation](#-installation--submodules) • [Tests](#-tests) • [Integration](#minimal-example-standalone-c) • [Architecture](#-architecture) • [Contributing](#-contributing)
 
 The audio haptics feature is now fully supported over Bluetooth, allowing you to experience immersive feedback without being tethered by a USB cable. The implementation uses **Opus codec compression** to ensure high-quality, low-latency haptic feedback even in wireless mode.
-<h2 align="center"><a href="https://youtu.be/JJFxJJESFUo?si=TlucVlhuunGG99Id" target="_blank">🎥 Watch the video here </a></h2>
+<h3 align="center"><a href="https://youtu.be/JJFxJJESFUo?si=TlucVlhuunGG99Id" target="_blank">🎥 Watch the video here </a></h3>
 </div>
 
 > [!IMPORTANT]
