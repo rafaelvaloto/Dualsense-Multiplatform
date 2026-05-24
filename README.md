@@ -48,9 +48,6 @@ The audio haptics feature is now fully supported over Bluetooth, allowing you to
 <h2 align="center"><a href="https://youtu.be/JJFxJJESFUo?si=TlucVlhuunGG99Id" target="_blank">🎥 Watch the video here </a></h2>
 </div>
 
-
----
-
 > [!IMPORTANT]
 > **API Migration Notice (v1.0.0+):** To improve clarity and architectural separation, gamepad features (Lightbar, Triggers, Haptics, etc.) are now accessed via specialized interfaces. 
 > Use the new helper methods (e.g., `GetIGamepadLightbar()`) to retrieve the specific interface before calling its functions.
