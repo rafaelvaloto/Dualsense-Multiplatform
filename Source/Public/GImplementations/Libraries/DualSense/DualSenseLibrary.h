@@ -46,7 +46,8 @@ class FDualSenseLibrary : public GamepadBase,
 
 public:
 	FDualSenseLibrary()
-		: AudioVibrationSequence(0), AudioSequence(0)
+	    : AudioVibrationSequence(0)
+	    , AudioSequence(0)
 	{
 	}
 
