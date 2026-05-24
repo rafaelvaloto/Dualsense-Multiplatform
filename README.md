@@ -56,10 +56,6 @@ The audio haptics feature is now fully supported over Bluetooth, allowing you to
 > Use the new helper methods (e.g., `GetIGamepadLightbar()`) to retrieve the specific interface before calling its functions.
 > [See more](#break-changes-v100)
 
-> [!IMPORTANT]
-> V1.0.0 Adds a new Bluetooth audio feature for headsets and speakers.
-> [See more](#-audio-haptics-integration-test-test-audio-haptics)
-
 ---
 
 ### 🚀 What is Dualsense-Multiplatform?
