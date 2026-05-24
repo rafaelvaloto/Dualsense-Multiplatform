@@ -126,7 +126,7 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 		// DSContext->BufferHapitcs[9] = 0b01000000; // sync times (?)
 		return true;
 	}
-	
+
 	ResetLights();
 	UpdateOutput();
 	return true;

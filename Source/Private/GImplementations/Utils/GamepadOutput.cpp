@@ -77,7 +77,7 @@ void FGamepadOutput::OutputDualSense(FDeviceContext* DeviceContext)
 	{
 		MutableBuffer[40] ^= 0x01;
 	}
-	
+
 	uint8_t AudioMode = 0b00000010; // Headset
 	if (HidOut->Audio.Mode == 1)
 	{
@@ -87,7 +87,7 @@ void FGamepadOutput::OutputDualSense(FDeviceContext* DeviceContext)
 	{
 		AudioMode = 0b00100010; // Headset + Speaker
 	}
-		
+
 	{
 		gc_lock::lock_guard<gc_lock::mutex> LockGuard(DeviceContext->OutputMutex);
 		unsigned char* Output = &MutableBuffer[Padding];

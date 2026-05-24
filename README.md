@@ -564,6 +564,6 @@ This software is an **independent project** and is **not affiliated** with Sony 
 
 This project is licensed under the **MIT License**. See the `LICENSE` file for details.
 
-Copyright (c) 2025 **Rafael Valoto**
+Copyright (c) 2026 **Rafael Valoto**
 
 </div>
