@@ -45,20 +45,13 @@
 [Features](#-features) • [Examples](#-implementations--integrations) • [Installation](#-installation--submodules) • [Tests](#-tests) • [Integration](#minimal-example-standalone-c) • [Architecture](#-architecture) • [Contributing](#-contributing)
 
 The audio haptics feature is now fully supported over Bluetooth, allowing you to experience immersive feedback without being tethered by a USB cable. The implementation uses **Opus codec compression** to ensure high-quality, low-latency haptic feedback even in wireless mode.
-<h2 align="center"><a href="https://youtu.be/JJFxJJESFUo?si=TlucVlhuunGG99Id" target="_blank">🎥 Watch the video here </a></h2>
+<h3 align="center"><a href="https://youtu.be/JJFxJJESFUo?si=TlucVlhuunGG99Id" target="_blank">🎥 Watch the video here </a></h3>
 </div>
-
-
----
 
 > [!IMPORTANT]
 > **API Migration Notice (v1.0.0+):** To improve clarity and architectural separation, gamepad features (Lightbar, Triggers, Haptics, etc.) are now accessed via specialized interfaces. 
 > Use the new helper methods (e.g., `GetIGamepadLightbar()`) to retrieve the specific interface before calling its functions.
 > [See more](#break-changes-v100)
-
-> [!IMPORTANT]
-> V1.0.0 Adds a new Bluetooth audio feature for headsets and speakers.
-> [See more](#-audio-haptics-integration-test-test-audio-haptics)
 
 ---
 
