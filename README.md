@@ -269,49 +269,6 @@ Captures real-time system output and converts it into haptic feedback on the fly
 
 ---
 
-[//]: # ()
-[//]: # (## 🎛️ Multi-Channel Haptics Test &#40;test-channels-haptics&#41;)
-
-[//]: # (The `test-channels-haptics` allows testing multiple controllers simultaneously with independent audio sources for haptics.)
-
-[//]: # ()
-[//]: # (**Usage:**)
-
-[//]: # (```bash)
-
-[//]: # (# Assign different WAV files to different gamepads &#40;using relative paths&#41;)
-
-[//]: # (./cmake-build-release/Tests/Integration/test-channels-haptics "Tests/Integration/Datasets/your_audio_1.wav" "Tests/Integration/Datasets/your_audio_2.wav")
-
-[//]: # ()
-[//]: # (# If more controllers are connected than files provided, the last file is repeated.)
-
-[//]: # (# If no file is provided, it defaults to System Audio Loopback for all controllers.)
-
-[//]: # (```)
-
-[//]: # ()
-[//]: # (**Features:**)
-
-[//]: # (- **Independent Channels:** Gamepad 1 gets the first WAV, Gamepad 2 gets the second, and so on.)
-
-[//]: # (- **Automatic Assignment:** Automatically detects connected gamepads and starts a dedicated audio worker for each.)
-
-[//]: # (- **Hot-Swap Support:** New controllers connected during the test will automatically start receiving haptic feedback.)
-
-### 🎵 Music Credits
-Special thanks to **Epidemic Sound** for providing high-quality royalty-free music for testing:
-
-1. **Track:** *Touch*  
-   **Artist:** *SCENE*  
-   **Source:** [Epidemic Sound](https://www.epidemicsound.com/)
-
-2. **Track:** *Replay*  
-   **Artist:** *Lawd Ito*  
-   **Source:** [Epidemic Sound](https://www.epidemicsound.com/)
-
----
-
 ## Break Changes v1.0.0
 ```cpp
 // Scan for connected devices
