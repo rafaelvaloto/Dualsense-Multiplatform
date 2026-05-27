@@ -247,10 +247,14 @@ The `test-gamepad-outputs` executable allows you to test various controller feed
 
 This integration test demonstrates the engine's capability to stream synchronized audio and haptic data using **miniaudio** and **Opus compression**.
 
+> [!NOTE]
+> **WAV Files Tracking:** To keep the repository lightweight, `.wav` files in the dataset folder are **not tracked** by Git. 
+> To test with your own audio, move your `.wav` files to `Tests/Integration/Datasets/` and provide the path as an argument.
+
 **Usage:**
 ```bash
 # Play a specific WAV file (using relative path)
-./cmake-build-release/Tests/Integration/test-audio-haptics "Tests/Integration/Datasets/ES_Touch_SCENE.wav"
+./cmake-build-release/Tests/Integration/test-audio-haptics "Tests/Integration/Datasets/your_audio_file.wav"
 
 # Capture system audio (Loopback mode)
 ./cmake-build-release/Tests/Integration/test-audio-haptics
@@ -284,7 +288,7 @@ Captures real-time system output and converts it into haptic feedback on the fly
 
 [//]: # (# Assign different WAV files to different gamepads &#40;using relative paths&#41;)
 
-[//]: # (./cmake-build-release/Tests/Integration/test-channels-haptics "Tests/Integration/Datasets/ES_Touch_SCENE.wav" "Tests/Integration/Datasets/ES_Replay_Lawd_Ito.wav")
+[//]: # (./cmake-build-release/Tests/Integration/test-channels-haptics "Tests/Integration/Datasets/your_audio_1.wav" "Tests/Integration/Datasets/your_audio_2.wav")
 
 [//]: # ()
 [//]: # (# If more controllers are connected than files provided, the last file is repeated.)
