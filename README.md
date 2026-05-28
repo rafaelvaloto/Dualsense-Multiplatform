@@ -285,6 +285,76 @@ int main() {
 }
 ```
 
+This design makes it trivial to support **custom platforms** (e.g., PlayStation SDK, proprietary embedded systems) without touching core logic.
+
+
+## 🧩 Architecture
+
+Gamepad-Core follows **strict separation of concerns** to ensure portability and extensibility:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Your Application                         │
+│              (Game Engine, Desktop App, Tool)               │
+└────────────────────────┬────────────────────────────────────┘
+                         │
+         ┌───────────────┴───────────────┐
+         │   Adapter Layer (Policy)      │  ◄── You implement this
+         │  (Engine-specific bindings)   │      (or use examples)
+         └───────────────┬───────────────┘
+                         │
+         ┌───────────────┴───────────────┐
+         │      GCore (Abstract)         │
+         │  • Device Registry            │  ◄── Pure C++, stable API
+         │  • ISonyGamepad Interface     │
+         │  • IGamepadTrigger Interface  │
+         └───────────────┬───────────────┘
+                         │
+         ┌───────────────┴───────────────┐
+         │   GImplementations (Drivers)  │
+         │  • DualSense HID Protocol     │  ◄── Hardware-specific
+         │  • DualShock 4 HID Protocol   │
+         └───────────────┬───────────────┘
+                         │
+         ┌───────────────┴───────────────┐
+         │   Platform Policy (OS/HAL)    │  ◄── OS-specific I/O
+         │  • Windows (SetupAPI + HID)   │
+         │  • Linux (HIDAPI)             │
+         │  • macOS (IOKit)              │
+         │  • Custom (PS5 SDK, etc.)     │
+         └───────────────────────────────┘
+```
+## 🎵 Audio Pipeline — How It Works
+
+Gamepad-Core provides a **complete audio-to-haptics and audio-to-speaker pipeline**.  Here's how the data flows from your application to the DualSense hardware:
+
+```aiignore
+┌─────────────────────────────────────────────────────────────┐
+│                    YOUR APPLICATION                         │
+│  • Captures audio (game sounds, music, etc.)                │
+│  • Mixes audio channels                                     │
+│  • Applies effects/filters                                  │
+└──────────────────────┬──────────────────────────────────────┘
+                       │ (sends audio buffer)
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   GAMEPAD-CORE LIB                          │
+│  • Receives audio buffer                                    │
+│  • Converts to haptic commands (for haptics)                │
+│  • Encodes for speaker output (for speaker)                 │
+│  • Sends via HID (USB/Bluetooth)                            │
+└──────────────────────┬──────────────────────────────────────┘
+                       │ (HID commands)
+                       ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   DUALSENSE HARDWARE                        │
+│  • Vibration motors (haptics)                               │
+│  • Built-in speaker                                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
 ## 🤝 Contributing
 
 - Add support for a new platform (e.g., FreeBSD, Android)
