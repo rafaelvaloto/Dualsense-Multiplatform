@@ -48,11 +48,6 @@ The core library provides high-performance HID communication with Sony's DualSen
 <h3 align="center"><a href="https://youtu.be/JJFxJJESFUo?si=TlucVlhuunGG99Id" target="_blank">🎥 Watch the video here </a></h3>
 </div>
 
-> [!IMPORTANT]
-> **API Migration Notice (v1.0.0+):** To improve clarity and architectural separation, gamepad features (Lightbar, Triggers, Haptics, etc.) are now accessed via specialized interfaces. 
-> Use the new helper methods (e.g., `GetIGamepadLightbar()`) to retrieve the specific interface before calling its functions.
-> [See more](#break-changes-v100)
-
 ---
 
 ### 🚀 What is Dualsense-Multiplatform?
