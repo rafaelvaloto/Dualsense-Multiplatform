@@ -22,7 +22,7 @@
 <br>
 ![Windows](https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white)
 ![Linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
-![macOS](https://img.shields.io/badge/macOS-000000?style=for-the-badge&logo=apple&logoColor=white)
+![macOS](https://img.shields.io/badge/macOS-536878?style=for-the-badge&logo=apple&logoColor=white)
 ![PlayStation](https://img.shields.io/badge/PlayStation-003791?style=for-the-badge&logo=playstation&logoColor=white)
 
 **Microcontrollers & SBCs**
@@ -35,7 +35,7 @@
 <br>
 ![Unreal Engine](https://img.shields.io/badge/Unreal_Engine-313131?style=for-the-badge&logo=unrealengine&logoColor=white)
 ![Godot](https://img.shields.io/badge/Godot-478CBF?style=for-the-badge&logo=godotengine&logoColor=white)
-![Unity](https://img.shields.io/badge/Unity-000000?style=for-the-badge&logo=unity&logoColor=white)
+![Unity](https://img.shields.io/badge/Unity-536878?style=for-the-badge&logo=unity&logoColor=white)
 ![O3DE](https://img.shields.io/badge/O3DE-FF6D00?style=for-the-badge&logo=op3n&logoColor=white)
 
 ---
@@ -44,12 +44,19 @@
 
 [Features](#-features) • [Examples](#-implementations--integrations) • [Installation](#-installation--submodules) • [Tests](#-tests) • [Integration](#minimal-example-standalone-c) • [Architecture](#-architecture) • [Contributing](#-contributing)
 
-The core library provides high-performance HID communication with Sony's DualSense and DualShock 4 controllers.
-<h3 align="center"><a href="https://youtu.be/JJFxJJESFUo?si=TlucVlhuunGG99Id" target="_blank">🎥 Watch the video here </a></h3>
+---
+
+<p align="center">
+	Download the sample app on Steam, or watch the demonstration video on YouTube:
+</p>
+<p align="center">
+	<a href="https://store.steampowered.com/app/4746690/Audio_vibration_sample_bluetooth_ps5_controller/" title="On Steam"><img src="https://img.shields.io/badge/Steam-536878?style=for-the-badge&logo=steam&logoColor=white" alt="On Steam"></a>    
+	<a href="https://youtu.be/JJFxJJESFUo?si=lhIcLWosU6UYANz9" title="Watch YouTube"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=YouTube&logoColor=white" alt="Watch YouTube"></a>
+</p>
+
 </div>
 
 ---
-
 ### 🚀 What is Dualsense-Multiplatform?
 
 **Dualsense-Multiplatform** is a high-performance, policy-based C++ library that unlocks the **full potential** of Sony's DualSense and DualShock 4 controllers through direct HID communication. 
@@ -89,7 +96,7 @@ The library leverages **policy-based design** to abstract platform-specific deta
 ## 🏆 Implementations & Integrations
 
 ### 1. Unreal Engine — Primary Integration
-**[Unreal-Dualsense](https://github.com/rafaelvaloto/Unreal-Dualsense) (v2.0.3)**
+**[Unreal-Dualsense](https://github.com/rafaelvaloto/Unreal-Dualsense)**
 
 The flagship plugin bringing native DualSense support to UE5 via Blueprint and C++.
 * ✅ Live Adaptive Trigger prototyping via Data Tables.
