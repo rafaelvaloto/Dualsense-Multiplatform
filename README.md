@@ -85,6 +85,44 @@ The library leverages **policy-based design** to abstract platform-specific deta
 
 ---
 
+
+## 🏆 Implementations & Integrations
+
+### 1. Unreal Engine — Primary Integration
+**[Unreal-Dualsense](https://github.com/rafaelvaloto/Unreal-Dualsense) (v2.0.3)**
+
+The flagship plugin bringing native DualSense support to UE5 via Blueprint and C++.
+* ✅ Live Adaptive Trigger prototyping via Data Tables.
+* ✅ Real-time Audio-to-Haptics submix processing.
+* ✅ Native Input System integration for Force Feedback & Motion.
+
+### 2. Raspberry Pico W — Microcontroller Integration
+Demonstrating the extreme portability and architectural efficiency of the library, the same core logic used in AAA game engines runs perfectly on a **Pico W (264KB RAM / 2MB Flash)**.
+
+**[🎥 Watch the example video on YouTube](https://www.youtube.com/watch?v=GgKDtwfS6v4)**
+
+The Pico W implementation includes **complete support** for all advanced DualSense capabilities:
+
+| **Input** | **Output (Haptics & More)** |
+| :--- | :--- |
+| **Motion:** Full 6-Axis Gyro & Accel | **Adaptive Triggers:** Weapon, Feedback & Buzz modes |
+| **Touchpad:** Multi-touch & Coordinates | **Haptic Feedback:** Dual independent motor control |
+| **System:** Battery & Charging status | **RGB Lightbar:** Full color & Player LED control |
+| **Standard:** All 17 buttons + Analog sticks | **Architecture:** Production-ready C++20 |
+
+*The Pico W implementation uses the exact same C++ core files as the Unreal and O3DE integrations, with zero logic changes.*
+
+[👉 Check out the Pico W implementation](https://github.com/rafaelvaloto/Pico_W-Dualsense)
+
+
+### 3. Other Prototypes & Mods
+
+* **[O3DE-Dualsense](https://github.com/rafaelvaloto/o3de-dualsense)** — O3DE Gem integration.
+* **[Godot-Dualsense](https://github.com/rafaelvaloto/Godot-Dualsense)** — GDExtension for Godot 4.x.
+* **[Mod Audio Haptics](https://github.com/rafaelvaloto/Gaming-Mods-Dualsense)** — Session Skate Sim mod.
+
+---
+
 ### Prerequisites
 
 - **CMake** 3.20 or higher
@@ -376,8 +414,15 @@ The foundation of this plugin was built upon the research and code from several 
 * [Nielk1 on GIST](https://gist.github.com/Nielk1/6d54cc2c00d2201ccb8c2720ad7538db) - HID report structures.
 * [DualSenseAPI](https://github.com/BadMagic100/DualSenseAPI/tree/master) - Hardware communication references.
 * [flok pydualsense](https://github.com/flok/pydualsense) - Feature report research.
+* [SAxense](https://github.com/egormanga/SAxense) - Base for Bluetooth Audio Haptics.
+* [Awalol/DS5Dongle](https://github.com/awalol/DS5Dongle) - Reference **Bluetooth Audio (Headset/Speaker)** opus codec and buffer sizes.
+* [miniaudio](https://github.com/mackron/miniaudio) - Audio playback and conversion library.
 * [Ryochan7/DS4Windows](https://github.com/Ryochan7/DS4Windows) - Industry standard for DualShock/DualSense on Windows.
 * [linux/drivers/hid/hid-playstation.c](https://github.com/torvalds/linux/blob/master/drivers/hid/hid-playstation.c#L1709) - Reference for calibration, gyroscope, and Linux driver standards.
+
+Special thanks to the community members who helped improve this plugin:
+
+* **[yncat](https://github.com/yncat)**: For the extensive research and implementation logic regarding **USB Audio Haptics**, which was crucial for supporting high-fidelity haptics via USB ([Issue #105](https://github.com/rafaelvaloto/Unreal-Dualsense/issues/105)).
 
 ---
 
