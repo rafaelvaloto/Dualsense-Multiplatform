@@ -97,12 +97,17 @@ The library leverages **policy-based design** to abstract platform-specific deta
 ## 🏆 Implementations & Integrations
 
 ### 1. Unreal Engine — Primary Integration
-**[Unreal-Dualsense](https://github.com/rafaelvaloto/Unreal-Dualsense)**
 
 The flagship plugin bringing native DualSense support to UE5 via Blueprint and C++.
 * ✅ Live Adaptive Trigger prototyping via Data Tables.
 * ✅ Real-time Audio-to-Haptics submix processing.
 * ✅ Native Input System integration for Force Feedback & Motion.
+
+⚠️ Important Notice
+
+Due to the lack of financial support for the project's maintenance and its large-scale use by leading companies in the gaming industry, this repository has been removed from GitHub. The use of this plugin now strictly requires a commercial license. To purchase it, please visit the official link on the Fab marketplace.
+
+[fab.com - Middleware Unreal-Dualsense PRO](https://www.fab.com/listings/d0836635-91a8-42cb-a78f-d34456cc042c)
 
 ### 2. Raspberry Pico W — Microcontroller Integration
 Demonstrating the extreme portability and architectural efficiency of the library, the same core logic used in AAA game engines runs perfectly on a **Pico W (264KB RAM / 2MB Flash)**.
