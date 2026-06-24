@@ -55,6 +55,13 @@
 	<a href="https://youtu.be/EPY0HWrbz84?si=Vn7sK0LKLFDk92GF" title="Watch YouTube"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=YouTube&logoColor=white" alt="Watch YouTube"></a>
 </p>
 
+
+# b-Run game On Steam
+
+b-Run is the first game released with native, full support for DualSense controller audio features via Bluetooth; Immerse yourself in a claustrophobic first-person horror experience. Navigate through dark ruins and narrow corridors where tension is constant.
+
+https://store.steampowered.com/app/4798010/bRun/
+
 </div>
 
 ---
