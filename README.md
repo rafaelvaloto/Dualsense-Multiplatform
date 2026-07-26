@@ -115,6 +115,12 @@ Due to the lack of financial support for the project's maintenance and its large
 
 [fab.com - Middleware Unreal-Dualsense PRO](https://www.fab.com/listings/d0836635-91a8-42cb-a78f-d34456cc042c)
 
+Your complete guide to integrating all the immersive features of the DualSense™ controller into your Unreal Engine projects.
+
+A detailed document with organized and commented real-world application projects.
+
+[Unreal-Dualsense-Pro-Docs](https://github.com/valotogames/Unreal-Dualsense-Pro-Docs/wiki)
+
 ### 2. Raspberry Pico W — Microcontroller Integration
 Demonstrating the extreme portability and architectural efficiency of the library, the same core logic used in AAA game engines runs perfectly on a **Pico W (264KB RAM / 2MB Flash)**.
 
