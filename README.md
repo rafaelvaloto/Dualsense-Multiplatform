@@ -117,9 +117,9 @@ Due to the lack of financial support for the project's maintenance and its large
 
 Your complete guide to integrating all the immersive features of the DualSense™ controller into your Unreal Engine projects.
 
-A detailed document with organized and commented real-world application projects.
+[Unreal-Dualsense-Pro-Docs](https://github.com/valotogames/Unreal-Dualsense-Pro-Docs/wiki): A detailed document with organized and commented real-world application projects.
 
-[Unreal-Dualsense-Pro-Docs](https://github.com/valotogames/Unreal-Dualsense-Pro-Docs/wiki)
+
 
 ### 2. Raspberry Pico W — Microcontroller Integration
 Demonstrating the extreme portability and architectural efficiency of the library, the same core logic used in AAA game engines runs perfectly on a **Pico W (264KB RAM / 2MB Flash)**.
