@@ -22,11 +22,13 @@
 #define DS_GYRO_RES_PER_DEG_S 1024
 #define DS_GYRO_RANGE (2048 * DS_GYRO_RES_PER_DEG_S)
 #define GRAVITY_MS2 9.80665f
+constexpr std::uint32_t NRVV1 = 0x52565631;
 constexpr float DS_PI = 3.1415926535f;
 constexpr float DS_RAD_TO_DEG = 180.0f / DS_PI;
 
 namespace DSCoreTypes
 {
+
 	struct DSVector2D
 	{
 		float X = 0.0f;

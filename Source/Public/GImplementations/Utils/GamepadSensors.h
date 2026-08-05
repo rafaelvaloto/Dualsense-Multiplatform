@@ -10,7 +10,7 @@ namespace FGamepadSensors
 {
 	inline void DualShockCalibrationSensors(const std::uint8_t* Buffer,
 	                                        FGamepadCalibration& OutCalibration,
-	                                        EDSDeviceConnection ConnectionType)
+	                                        FDeviceContext& DeviceContext)
 	{
 		auto GetLE16 = [](const std::uint8_t* Data) -> std::int16_t {
 			return static_cast<std::int16_t>(Data[0] | (Data[1] << 8));
@@ -19,6 +19,7 @@ namespace FGamepadSensors
 		const std::int16_t GyroPitchBias = GetLE16(&Buffer[1]);
 		const std::int16_t GyroYawBias = GetLE16(&Buffer[3]);
 		const std::int16_t GyroRollBias = GetLE16(&Buffer[5]);
+		const auto Calibration = DeviceContext.Buffer;
 
 		std::int16_t GyroPitchPlus = GetLE16(&Buffer[7]);
 		std::int16_t GyroYawPlus = GetLE16(&Buffer[9]);
@@ -26,7 +27,7 @@ namespace FGamepadSensors
 		std::int16_t GyroPitchMinus = GetLE16(&Buffer[13]);
 		std::int16_t GyroYawMinus = GetLE16(&Buffer[15]);
 		std::int16_t GyroRollMinus = GetLE16(&Buffer[17]);
-		if (ConnectionType == EDSDeviceConnection::Usb)
+		if (DeviceContext.ConnectionType == EDSDeviceConnection::Usb)
 		{
 			GyroPitchPlus = GetLE16(&Buffer[7]);
 			GyroPitchMinus = GetLE16(&Buffer[9]);
@@ -54,6 +55,7 @@ namespace FGamepadSensors
 		// Using float to ensure precision in sum before division
 		constexpr float GyroScale = 937.0f; // Typical speed used in DS4/DS5 factory calibration
 		constexpr float ReferenceRangeDegS = GyroScale * 2.0f;
+		std::memcpy(&Calibration[74], &NRVV1, sizeof(NRVV1)); // Little-Endian
 
 		// ABS logic works better now that they are int16
 		const auto DenomX = static_cast<float>(std::abs(GyroPitchPlus - GyroPitchBias) + std::abs(GyroPitchMinus - GyroPitchBias));
@@ -83,12 +85,14 @@ namespace FGamepadSensors
 	}
 
 	inline void DualSenseCalibrationSensors(const std::uint8_t* Buffer,
-	                                        FGamepadCalibration& OutCalibration)
+	                                        FGamepadCalibration& OutCalibration,
+	                                        FDeviceContext& DeviceContext)
 	{
 		auto GetLE16 = [](const std::uint8_t* Data) -> std::int16_t {
 			return static_cast<std::int16_t>(Data[0] | (Data[1] << 8));
 		};
 
+		const auto Calibration = DeviceContext.Buffer;
 		// All are now int16_t
 		const std::int16_t GyroPitchBias = GetLE16(&Buffer[1]);
 		const std::int16_t GyroYawBias = GetLE16(&Buffer[3]);
@@ -111,10 +115,12 @@ namespace FGamepadSensors
 		const std::int16_t AccelZPlus = GetLE16(&Buffer[31]);
 		const std::int16_t AccelZMinus = GetLE16(&Buffer[33]);
 
+
 		// Gyro Biases (Cleaned up duplicate code)
 		OutCalibration.GyroBiasX = static_cast<float>(GyroPitchBias);
 		OutCalibration.GyroBiasY = static_cast<float>(GyroYawBias);
 		OutCalibration.GyroBiasZ = static_cast<float>(GyroRollBias);
+		std::memcpy(&Calibration[74], &NRVV1, sizeof(NRVV1)); // Little-Endian
 
 		// Gyro Factors
 		// Using float to ensure precision in sum before division
