@@ -10,7 +10,7 @@ namespace FGamepadSensors
 {
 	inline void DualShockCalibrationSensors(const std::uint8_t* Buffer,
 	                                        FGamepadCalibration& OutCalibration,
-	                                        FDeviceContext& DeviceContext)
+	                                        FDeviceContext* DeviceContext)
 	{
 		auto GetLE16 = [](const std::uint8_t* Data) -> std::int16_t {
 			return static_cast<std::int16_t>(Data[0] | (Data[1] << 8));
@@ -19,7 +19,7 @@ namespace FGamepadSensors
 		const std::int16_t GyroPitchBias = GetLE16(&Buffer[1]);
 		const std::int16_t GyroYawBias = GetLE16(&Buffer[3]);
 		const std::int16_t GyroRollBias = GetLE16(&Buffer[5]);
-		const auto Calibration = DeviceContext.Buffer;
+		const auto Calibration = DeviceContext->Buffer;
 
 		std::int16_t GyroPitchPlus = GetLE16(&Buffer[7]);
 		std::int16_t GyroYawPlus = GetLE16(&Buffer[9]);
@@ -27,7 +27,7 @@ namespace FGamepadSensors
 		std::int16_t GyroPitchMinus = GetLE16(&Buffer[13]);
 		std::int16_t GyroYawMinus = GetLE16(&Buffer[15]);
 		std::int16_t GyroRollMinus = GetLE16(&Buffer[17]);
-		if (DeviceContext.ConnectionType == EDSDeviceConnection::Usb)
+		if (DeviceContext->ConnectionType == EDSDeviceConnection::Usb)
 		{
 			GyroPitchPlus = GetLE16(&Buffer[7]);
 			GyroPitchMinus = GetLE16(&Buffer[9]);
@@ -86,13 +86,13 @@ namespace FGamepadSensors
 
 	inline void DualSenseCalibrationSensors(const std::uint8_t* Buffer,
 	                                        FGamepadCalibration& OutCalibration,
-	                                        FDeviceContext& DeviceContext)
+	                                        FDeviceContext* DeviceContext)
 	{
 		auto GetLE16 = [](const std::uint8_t* Data) -> std::int16_t {
 			return static_cast<std::int16_t>(Data[0] | (Data[1] << 8));
 		};
 
-		const auto Calibration = DeviceContext.Buffer;
+		const auto Calibration = DeviceContext->Buffer;
 		// All are now int16_t
 		const std::int16_t GyroPitchBias = GetLE16(&Buffer[1]);
 		const std::int16_t GyroYawBias = GetLE16(&Buffer[3]);
