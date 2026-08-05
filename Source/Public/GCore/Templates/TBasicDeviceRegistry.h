@@ -112,6 +112,11 @@ namespace GamepadCore
 			TimeAccumulator = DetectionInterval;
 		}
 
+		void CreateDevice(FDeviceContext& Context)
+		{
+			CreateLibrary(Context);
+		}
+
 	private:
 		void CreateLibrary(FDeviceContext& Context)
 		{
