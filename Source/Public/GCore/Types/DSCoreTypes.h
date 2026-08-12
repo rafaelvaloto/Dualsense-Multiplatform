@@ -22,7 +22,9 @@
 #define DS_GYRO_RES_PER_DEG_S 1024
 #define DS_GYRO_RANGE (2048 * DS_GYRO_RES_PER_DEG_S)
 #define GRAVITY_MS2 9.80665f
-constexpr std::uint32_t NRVV1 = 0x52565631;
+constexpr std::uint32_t NRVV1 = 0x31565652;
+constexpr std::uint32_t NRVV2 = 0x32565652;
+constexpr std::uint32_t NRVV3 = 0x33565652;
 constexpr float DS_PI = 3.1415926535f;
 constexpr float DS_RAD_TO_DEG = 180.0f / DS_PI;
 

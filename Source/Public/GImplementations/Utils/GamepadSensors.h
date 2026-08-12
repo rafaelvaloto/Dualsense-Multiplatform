@@ -118,7 +118,7 @@ namespace FGamepadSensors
 		OutCalibration.GyroBiasY = static_cast<float>(GyroYawBias);
 		OutCalibration.GyroBiasZ = static_cast<float>(GyroRollBias);
 		const auto Calibration = DeviceContext->GetRawOutputBuffer();
-		std::memcpy(&Calibration[69], &NRVV1, sizeof(NRVV1));
+		std::memcpy(&Calibration[69], &NRVV3, sizeof(NRVV3));
 
 		// Gyro Factors
 		// Using float to ensure precision in sum before division
