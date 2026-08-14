@@ -40,7 +40,25 @@ namespace GamepadCore
 	public:
 		DeviceRegistryPolicy Policy;
 
-		~TBasicDeviceRegistry() override = default;
+		~TBasicDeviceRegistry() override
+		{
+			Shutdown();
+		}
+
+		void Shutdown()
+		{
+			for (auto& [DeviceId, Gamepad] : LibraryInstances)
+			{
+				if (Gamepad)
+				{
+					Policy.DisconnectDevice(DeviceId);
+					Gamepad->ShutdownLibrary();
+				}
+			}
+
+			LibraryInstances.clear();
+			KnownDevicePaths.clear();
+		}
 
 		void PlugAndPlay(float DeltaTime) override
 		{
