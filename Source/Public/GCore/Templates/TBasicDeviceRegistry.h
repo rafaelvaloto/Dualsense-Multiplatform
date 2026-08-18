@@ -40,25 +40,7 @@ namespace GamepadCore
 	public:
 		DeviceRegistryPolicy Policy;
 
-		~TBasicDeviceRegistry() override
-		{
-			Shutdown();
-		}
-
-		void Shutdown()
-		{
-			for (auto& [DeviceId, Gamepad] : LibraryInstances)
-			{
-				if (Gamepad)
-				{
-					Policy.DisconnectDevice(DeviceId);
-					Gamepad->ShutdownLibrary();
-				}
-			}
-
-			LibraryInstances.clear();
-			KnownDevicePaths.clear();
-		}
+		~TBasicDeviceRegistry() override = default;
 
 		void PlugAndPlay(float DeltaTime) override
 		{
@@ -98,6 +80,22 @@ namespace GamepadCore
 
 			for (auto Context : DetectedDevices)
 			{
+				const auto KnownPath = KnownDevicePaths.find(Context.Path);
+				if (KnownPath != KnownDevicePaths.end())
+				{
+					const auto Library = LibraryInstances.find(KnownPath->second);
+					if (Library != LibraryInstances.end() && Library->second)
+					{
+						IGamepadBase* Gamepad = Library->second.get();
+						FDeviceContext* DeviceContext = Gamepad->GetMutableDeviceContext();
+
+						if (DeviceContext && DeviceContext->IsConnected)
+						{
+							continue;
+						}
+					}
+				}
+
 				Context.Output = FOutputContext();
 				if (bool IsCreateHandle = IPlatformHardware::Get().CreateHandle(&Context))
 				{
