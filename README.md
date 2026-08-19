@@ -61,8 +61,6 @@
 
 **Dualsense-Multiplatform** is a high-performance, policy-based C++ library that unlocks the **full potential** of Sony's DualSense and DualShock 4 controllers through direct HID communication. 
 
-Unlike generic gamepad APIs (XInput, SDL, etc.), Gamepad-Core gives you **raw, low-level access** to advanced hardware features that standard drivers can't touch.
-
 ### 🌍 True Cross-Platform Architecture
 
 Dualsense-Multiplatform is **engine-agnostic by design**. It is a pure C++ library that works anywhere C++20 is supported. 
@@ -124,7 +122,39 @@ The Pico W implementation includes **complete support** for all advanced DualSen
 
 ---
 
-### 3. Other Prototypes & Mods
+### 3. FFI Integration — Use from Any Language
+
+Test quickly with a C# implementation or create an implementation for your preferred language. The C-compatible API is
+designed to integrate seamlessly with any language that supports FFI (Foreign Function Interface), including **Python,
+Rust, Go, Java**, and more.
+
+#### 📥 Precompiled Binaries (Windows x64)
+
+For quick integration without building from source,
+**[download the precompiled GamepadCoreHost.dll](https://github.com/rafaelvaloto/Gamepad-Core/releases/download/v1.0.6/GamepadCoreHost.dll)**
+binary directly from the releases page. This shared library is ready to use with any compatible host application or game
+engine that supports C-compatible FFI (Foreign Function Interface).
+
+🌐 **[C-API Repository: Gamepad-Core-Host](https://github.com/rafaelvaloto/Gamepad-Core-Host)**
+
+#### 🚀 Client Implementation Example
+
+Check out the companion command-line application that consumes this API:
+
+* **[Gamepad-Client (C#)](https://github.com/rafaelvaloto/G-Client-Sharp)** - Console application example consuming the
+  C API
+
+**Quick Start:**
+
+```bash
+git clone https://github.com/rafaelvaloto/G-Client-Sharp
+dotnet build .\G-Client-Sharp\G-Client-Sharp.csproj
+dotnet run --project .\G-Client-Sharp\G-Client-Sharp.csproj -- "C:\path\to\GamepadCoreHost.dll"
+```
+
+---
+
+### 4. Other Prototypes & Mods
 
 * **[O3DE-Dualsense](https://github.com/rafaelvaloto/o3de-dualsense)** — O3DE Gem integration.
 * **[Godot-Dualsense](https://github.com/katamaritaco/Godot-Dualsense)** — GDExtension for Godot 4.x, by katamaritaco.
