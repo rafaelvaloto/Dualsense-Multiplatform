@@ -146,11 +146,31 @@ Check out the companion command-line application that consumes this API:
 
 **Quick Start:**
 
-```bash
-git clone https://github.com/rafaelvaloto/G-Client-Sharp
+```powershell
 dotnet build .\G-Client-Sharp\G-Client-Sharp.csproj
-dotnet run --project .\G-Client-Sharp\G-Client-Sharp.csproj -- "C:\path\to\GamepadCoreHost.dll"
 ```
+Running without arguments prints the default DLL location and command-line help:
+
+```powershell
+dotnet run --project .\G-Client-Sharp\G-Client-Sharp.csproj
+```
+
+Start device monitoring with the default DLL path and display the native API
+descriptor information:
+
+```powershell
+dotnet run --project .\G-Client-Sharp\G-Client-Sharp.csproj -- --info
+```
+
+Pass a different native DLL path with `--dll` (or `-d`):
+
+```powershell
+dotnet run --project .\G-Client-Sharp\G-Client-Sharp.csproj -- `
+  --dll "C:\path\to\GamepadCoreHost.dll"
+```
+
+The DLL must match the process architecture. Use an x64 DLL with the x64 .NET
+process.
 
 ---
 
