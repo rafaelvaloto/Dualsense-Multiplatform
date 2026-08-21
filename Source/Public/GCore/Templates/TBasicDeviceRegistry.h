@@ -8,6 +8,8 @@
 #include "GCore/Types/ECoreGamepad.h"
 #include "GImplementations/Libraries/DualSense/DualSenseLibrary.h"
 #include "GImplementations/Libraries/DualShock/DualShockLibrary.h"
+#include <chrono>
+#include <future>
 #include <ranges>
 #include <vector>
 
@@ -29,79 +31,55 @@ namespace GamepadCore
 	{
 		// Device Engine type
 		using EngineIdType = typename DeviceRegistryPolicy::EngineIdType;
+		using FDetectedDeviceMap = std::unordered_map<std::string, FDeviceContext>;
 
+		FDetectedDeviceMap LastDetectDevices;
 		std::unordered_map<std::string, typename DeviceRegistryPolicy::EngineIdType> KnownDevicePaths;
 		std::unordered_map<std::string, typename DeviceRegistryPolicy::EngineIdType> HistoryDevices;
 		std::unordered_map<typename DeviceRegistryPolicy::EngineIdType, std::shared_ptr<IGamepadBase>, typename DeviceRegistryPolicy::Hasher> LibraryInstances;
 
 		float TimeAccumulator = 0.0f;
-		const float DetectionInterval = 1.0f;
+		const float DetectionInterval = 2.0f;
+		std::future<FDetectedDeviceMap> DetectionTask;
 
 	public:
 		DeviceRegistryPolicy Policy;
 
-		~TBasicDeviceRegistry() override = default;
+		~TBasicDeviceRegistry() override
+		{
+			if (DetectionTask.valid())
+			{
+				DetectionTask.wait();
+			}
+		}
 
 		void PlugAndPlay(float DeltaTime) override
 		{
+			if (DetectionTask.valid() &&
+			    DetectionTask.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
+			{
+				LastDetectDevices = DetectionTask.get();
+				ApplyDetectedDevices();
+			}
+
 			TimeAccumulator += DeltaTime;
-			if (TimeAccumulator < DetectionInterval)
+			if (TimeAccumulator < DetectionInterval || DetectionTask.valid())
 			{
 				return;
 			}
 			TimeAccumulator = 0.0f;
 
-			std::unordered_set<std::string> OrphanPaths;
-			OrphanPaths.clear();
-			for (const auto& [Path, Key] : KnownDevicePaths)
-			{
-				OrphanPaths.insert(Path);
-			}
+			DetectionTask = std::async(std::launch::async, [] {
+				std::vector<FDeviceContext> DetectedDevices;
+				IPlatformHardware::Get().Detect(DetectedDevices);
 
-			std::vector<FDeviceContext> DetectedDevices;
-			DetectedDevices.clear();
-			IPlatformHardware::Get().Detect(DetectedDevices);
-
-			for (const auto& Context : DetectedDevices)
-			{
-				OrphanPaths.erase(Context.Path);
-			}
-
-			for (const std::string& Path : OrphanPaths)
-			{
-				auto It = KnownDevicePaths.find(Path);
-				if (It != KnownDevicePaths.end())
+				FDetectedDeviceMap DetectedDeviceMap;
+				for (FDeviceContext& DetectedDevice : DetectedDevices)
 				{
-					EngineIdType DeviceId = It->second;
-					RemoveLibraryInstance(DeviceId);
-					KnownDevicePaths.erase(It);
+					DetectedDeviceMap[DetectedDevice.Path] = std::move(DetectedDevice);
 				}
-			}
-
-			for (auto Context : DetectedDevices)
-			{
-				const auto KnownPath = KnownDevicePaths.find(Context.Path);
-				if (KnownPath != KnownDevicePaths.end())
-				{
-					const auto Library = LibraryInstances.find(KnownPath->second);
-					if (Library != LibraryInstances.end() && Library->second)
-					{
-						IGamepadBase* Gamepad = Library->second.get();
-						FDeviceContext* DeviceContext = Gamepad->GetMutableDeviceContext();
-
-						if (DeviceContext && DeviceContext->IsConnected)
-						{
-							continue;
-						}
-					}
-				}
-
-				Context.Output = FOutputContext();
-				if (bool IsCreateHandle = IPlatformHardware::Get().CreateHandle(&Context))
-				{
-					CreateLibrary(Context);
-				}
-			}
+				return DetectedDeviceMap;
+			});
 		}
 
 		IGamepadBase* GetLibrary(EngineIdType DeviceId)
@@ -115,11 +93,26 @@ namespace GamepadCore
 
 		void RemoveLibraryInstance(EngineIdType DeviceId)
 		{
+			// First, release the device from the engine's message handle to prevent it from being locked,
+			// causing conflicts, and to ensure the engine understands that the device no longer exists.
 			Policy.DisconnectDevice(DeviceId);
 			if (LibraryInstances.contains(DeviceId))
 			{
-				LibraryInstances[DeviceId]->ShutdownLibrary();
-				LibraryInstances.erase(DeviceId);
+				// Never Change This.
+				// This block is necessary because Windows does not detect disconnection when pressing the PlayStation button.
+				// Forcing handle creation makes Windows recognize that the device is no longer connected.
+				// After that, we can clean up the library from memory, clear the buffers, and release the handle.
+				if (LibraryInstances[DeviceId])
+				{
+					auto* ctx = LibraryInstances[DeviceId]->GetMutableDeviceContext();
+					if (ctx->ConnectionType == EDSDeviceConnection::Bluetooth)
+					{
+						IPlatformHardware::Get().InvalidateHandle(ctx);
+						IPlatformHardware::Get().CreateHandle(ctx);
+					}
+					LibraryInstances[DeviceId]->ShutdownLibrary();
+					LibraryInstances.erase(DeviceId);
+				}
 			}
 		}
 
@@ -134,8 +127,49 @@ namespace GamepadCore
 		}
 
 	private:
+		void ApplyDetectedDevices()
+		{
+			std::unordered_set<std::string> OrphanPaths;
+			for (const auto& [Path, Key] : KnownDevicePaths)
+			{
+				OrphanPaths.insert(Path);
+			}
+
+			for (const auto& [Path, Context] : LastDetectDevices)
+			{
+				OrphanPaths.erase(Path);
+			}
+
+			for (const auto& Path : OrphanPaths)
+			{
+				auto It = KnownDevicePaths.find(Path);
+				if (It != KnownDevicePaths.end())
+				{
+					EngineIdType DeviceId = It->second;
+					RemoveLibraryInstance(DeviceId);
+					KnownDevicePaths.erase(It);
+				}
+			}
+
+			for (const auto& [Path, DetectedContext] : LastDetectDevices)
+			{
+				if (KnownDevicePaths.contains(Path))
+				{
+					continue;
+				}
+
+				FDeviceContext Context = DetectedContext;
+				if (IPlatformHardware::Get().CreateHandle(&Context))
+				{
+					CreateLibrary(Context);
+				}
+			}
+		}
+
 		void CreateLibrary(FDeviceContext& Context)
 		{
+			Context.Output = FOutputContext();
+
 			std::shared_ptr<IGamepadBase> Gamepad = nullptr;
 			if (Context.DeviceType == EDSDeviceType::DualSense || Context.DeviceType == EDSDeviceType::DualSenseEdge)
 			{
