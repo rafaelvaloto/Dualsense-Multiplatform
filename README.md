@@ -69,6 +69,7 @@
 </div>
 
 ---
+
 ### 🚀 What is Dualsense-Multiplatform?
 
 **Dualsense-Multiplatform** is a high-performance, policy-based C++ library that unlocks the **full potential** of Sony's DualSense and DualShock 4 controllers through direct HID communication. 
@@ -78,6 +79,27 @@
 Dualsense-Multiplatform is **engine-agnostic by design**. It is a pure C++ library that works anywhere C++20 is supported. 
 
 The library leverages **policy-based design** to abstract platform-specific details. This zero-cost abstraction makes it trivial to extend support to new platforms or custom hardware without touching the core logic.
+
+---
+
+## 🎮 Live web debug
+
+[![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
+[![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)](https://webassembly.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+
+Experience the core C++ architecture running natively in your browser. This real-time debugger leverages **WebAssembly (WASM)** for high-performance execution, seamlessly integrated through a clean **TypeScript** and **JavaScript** binding layer. 
+
+No installation required. Test your controllers right now:
+
+### 🔴 **[Launch DualSense Integration Test Online](https://rafaelvaloto.github.io/Gamepad-Core-Web/testes/index.html)**
+
+---
+
+### 🚀 What is Gamepad-Core-Web?
+
+**Gamepad-Core-Web** is the browser-native port of the core C++ gamepad library...
 
 ---
 
