@@ -91,9 +91,14 @@ The library leverages **policy-based design** to abstract platform-specific deta
 
 Experience the core C++ architecture running natively in your browser. This real-time debugger leverages **WebAssembly (WASM)** for high-performance execution, seamlessly integrated through a clean **TypeScript** and **JavaScript** binding layer. 
 
-No installation required. Test your controllers right now:
+No installation required.
 
-### 🔴 **[Launch DualSense Integration Test Online](https://rafaelvaloto.github.io/Gamepad-Core-Web/testes/index.html)**
+Experience live audio haptic routing in any Chromium-based browser (Chrome, Edge, Opera, Brave):
+
+👉 **[Launch DS5 Web Audio Haptics Online](https://rafaelvaloto.github.io/DS5-Web-Audio-Haptics/testes/index.html)**
+
+### https://github.com/rafaelvaloto/DS5-Web-Audio-Haptics
+
 
 ---
 
