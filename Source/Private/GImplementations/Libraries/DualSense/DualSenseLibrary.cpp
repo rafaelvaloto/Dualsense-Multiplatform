@@ -118,10 +118,11 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 		DSContext->BufferHapitcs[2] = 0x91;
 		DSContext->BufferHapitcs[3] = 0x07;
 		DSContext->BufferHapitcs[4] = 0xfe;
-		DSContext->BufferHapitcs[5] = 0b11111111; // frequency filters  (?)
-		DSContext->BufferHapitcs[6] = 0b11111111; // ...
-		DSContext->BufferHapitcs[7] = 0b11111111; // ...
-		DSContext->BufferHapitcs[8] = 0b11111111; // ...
+		DSContext->BufferHapitcs[5] = 0xff; // frequency filters  (?)
+		DSContext->BufferHapitcs[6] = 0xff; // ...
+		DSContext->BufferHapitcs[7] = 0xff; // ...
+		DSContext->BufferHapitcs[8] = 0xff; // ...
+		// DSContext->BufferHapitcs[9] = 0x40; // sync times (?)
 		DSContext->BufferHapitcs[9] = 0b00111111; // sync times (?)
 		// DSContext->BufferHapitcs[9] = 0b01000000; // sync times (?)
 		return true;
@@ -142,8 +143,7 @@ void FDualSenseLibrary::UpdateInput(float /*Delta*/)
 
 	IPlatformHardware::Get().Read(Context);
 	FInputContext* InputToFill = Context->GetBackBuffer();
-	const size_t Padding =
-	    Context->ConnectionType == EDSDeviceConnection::Bluetooth ? 2 : 1;
+	const size_t Padding = Context->ConnectionType == EDSDeviceConnection::Bluetooth ? 2 : 1;
 
 	using namespace FGamepadInput;
 	DualSenseRaw(&Context->Buffer[Padding], InputToFill);
@@ -391,7 +391,7 @@ void FDualSenseLibrary::AudioHapticUpdate(const std::vector<std::uint8_t>& Hapti
 		Audio[10] = (AudioVibrationSequence++) & 0xFF;
 		Audio[11] = 0x92;
 		Audio[12] = 0x40;
-		Audio[77] = 0x95;
+		Audio[77] = Context->Output.Audio.Mode == 2 ? 0x95 : 0x96;
 		Audio[78] = std::min(AudioData.size(), static_cast<size_t>(200));
 		if (!HapticsData.empty())
 		{
