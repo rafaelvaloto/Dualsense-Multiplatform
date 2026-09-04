@@ -95,7 +95,7 @@ No installation required.
 
 Experience live audio haptic routing in any Chromium-based browser (Chrome, Edge, Opera, Brave):
 
-👉 **[Launch DS5 Web Audio Haptics Online](https://rafaelvaloto.github.io/DS5-Web-Audio-Haptics/testes/index.html)**
+👉 **[Launch DS5 Web Audio Haptics Online](https://rafaelvaloto.github.io/DS5-Web-Audio-Haptics/)**
 
 ### https://github.com/rafaelvaloto/DS5-Web-Audio-Haptics
 
