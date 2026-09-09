@@ -82,7 +82,7 @@ The library leverages **policy-based design** to abstract platform-specific deta
 
 ---
 
-## 🎮 Live web debug
+## 🎮 Live Web
 
 [![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
 [![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)](https://webassembly.org/)
@@ -91,13 +91,12 @@ The library leverages **policy-based design** to abstract platform-specific deta
 
 Experience the core C++ architecture running natively in your browser. This real-time debugger leverages **WebAssembly (WASM)** for high-performance execution, seamlessly integrated through a clean **TypeScript** and **JavaScript** binding layer. 
 
-No installation required.
+### 🧩 Browser Extension
 
-Experience live audio haptic routing in any Chromium-based browser (Chrome, Edge, Opera, Brave):
+You can also use this tool as a dedicated browser extension for an integrated experience.
 
-👉 **[Launch DS5 Web Audio Haptics Online](https://rafaelvaloto.github.io/DS5-Web-Audio-Haptics/)**
-
-### https://github.com/rafaelvaloto/DS5-Web-Audio-Haptics
+* **Status:** Available now on the [Chrome Web Store](https://chromewebstore.google.com/detail/npadkgahblelfcdfcoddadobolkfbchp) Add-ons.
+* **Compatibility:** Works natively on Google Chrome, Microsoft Edge, Brave, Opera, Firefox, and other browsers.
 
 
 ---
