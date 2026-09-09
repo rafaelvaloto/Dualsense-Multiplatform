@@ -102,12 +102,6 @@ Experience live audio haptic routing in any Chromium-based browser (Chrome, Edge
 
 ---
 
-### 🚀 What is Gamepad-Core-Web?
-
-**Gamepad-Core-Web** is the browser-native port of the core C++ gamepad library...
-
----
-
 ## ✨ Features
 
 * **🏗️ Extensible Multi-Platform Architecture**
