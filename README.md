@@ -98,7 +98,6 @@ You can also use this tool as a dedicated browser extension for an integrated ex
 * **Status:** Available now on the [Chrome Web Store](https://chromewebstore.google.com/detail/npadkgahblelfcdfcoddadobolkfbchp) Add-ons.
 * **Compatibility:** Works natively on Google Chrome, Microsoft Edge, Brave, Opera, Firefox, and other browsers.
 
-
 ---
 
 ## ✨ Features
@@ -121,7 +120,6 @@ You can also use this tool as a dedicated browser extension for an integrated ex
     Native support for DualSense (Standard/Edge) and DualShock 4. The model-agnostic architecture is prepared for legacy hardware expansion, such as PS1 and PS2 models.
 
 ---
-
 
 ## 🏆 Implementations & Integrations
 
@@ -163,7 +161,7 @@ Rust, Go, Java**, and more.
 #### 📥 Precompiled Binaries (Windows x64)
 
 For quick integration without building from source,
-**[download the precompiled GamepadCoreHost.dll](https://github.com/rafaelvaloto/Gamepad-Core/releases/download/v1.0.6/GamepadCoreHost.dll)**
+**[download the precompiled .dll](https://github.com/rafaelvaloto/Gamepad-Core-Host/releases/tag/v1.0.6)
 binary directly from the releases page. This shared library is ready to use with any compatible host application or game
 engine that supports C-compatible FFI (Foreign Function Interface).
 
@@ -184,7 +182,6 @@ Check out the companion command-line application that consumes this API:
 
 * **[O3DE-Dualsense](https://github.com/rafaelvaloto/o3de-dualsense)** — O3DE Gem integration.
 * **[Godot-Dualsense](https://github.com/katamaritaco/Godot-Dualsense)** — GDExtension for Godot 4.x, by katamaritaco.
-* **[Mod Audio Haptics](https://github.com/rafaelvaloto/Gaming-Mods-Dualsense)** — Session Skate Sim mod.
 
 ---
 
