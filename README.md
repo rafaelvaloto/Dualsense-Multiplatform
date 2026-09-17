@@ -82,16 +82,12 @@ The library leverages **policy-based design** to abstract platform-specific deta
 
 ---
 
-## 🎮 Live Web
+## 🧩 Browser Extension
 
 [![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
 [![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)](https://webassembly.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-
-Experience the core C++ architecture running natively in your browser. This real-time debugger leverages **WebAssembly (WASM)** for high-performance execution, seamlessly integrated through a clean **TypeScript** and **JavaScript** binding layer. 
-
-### 🧩 Browser Extension
 
 You can also use this tool as a dedicated browser extension for an integrated experience.
 
