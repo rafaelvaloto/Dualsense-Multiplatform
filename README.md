@@ -80,19 +80,6 @@ Dualsense-Multiplatform is **engine-agnostic by design**. It is a pure C++ libra
 
 The library leverages **policy-based design** to abstract platform-specific details. This zero-cost abstraction makes it trivial to extend support to new platforms or custom hardware without touching the core logic.
 
----
-
-## 🧩 Browser Extension
-
-[![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
-[![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)](https://webassembly.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-
-You can also use this tool as a dedicated browser extension for an integrated experience.
-
-* **Status:** Available now on the [Chrome Web Store](https://chromewebstore.google.com/detail/npadkgahblelfcdfcoddadobolkfbchp) Add-ons.
-* **Compatibility:** Works natively on Google Chrome, Microsoft Edge, Brave, Opera, Firefox, and other browsers.
 
 ---
 
@@ -114,6 +101,23 @@ You can also use this tool as a dedicated browser extension for an integrated ex
     Automatic handling of the microphone mute LED state based on device status.
 * **🎮 Multi-Controller Support**
     Native support for DualSense (Standard/Edge) and DualShock 4. The model-agnostic architecture is prepared for legacy hardware expansion, such as PS1 and PS2 models.
+
+
+
+
+---
+
+## 🧩 Browser Extension
+
+[![C++](https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white)](https://isocpp.org/)
+[![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)](https://webassembly.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+
+You can also use this tool as a dedicated browser extension for an integrated experience.
+
+* **Status:** Available now on the [Chrome Web Store](https://chromewebstore.google.com/detail/npadkgahblelfcdfcoddadobolkfbchp) Add-ons.
+* **Compatibility:** Works natively on Google Chrome, Microsoft Edge, Brave, Opera, Firefox, and other browsers.
 
 ---
 
