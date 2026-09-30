@@ -20,20 +20,14 @@ namespace FGamepadSensors
 		const std::int16_t GyroYawBias = GetLE16(&Buffer[3]);
 		const std::int16_t GyroRollBias = GetLE16(&Buffer[5]);
 
-		std::int16_t GyroPitchPlus = GetLE16(&Buffer[7]);
-		std::int16_t GyroYawPlus = GetLE16(&Buffer[9]);
-		std::int16_t GyroRollPlus = GetLE16(&Buffer[11]);
-		std::int16_t GyroPitchMinus = GetLE16(&Buffer[13]);
-		std::int16_t GyroYawMinus = GetLE16(&Buffer[15]);
-		std::int16_t GyroRollMinus = GetLE16(&Buffer[17]);
+		const std::int16_t GyroPitchPlus = GetLE16(&Buffer[7]);
+		const std::int16_t GyroPitchMinus = GetLE16(&Buffer[9]);
+		const std::int16_t GyroYawPlus = GetLE16(&Buffer[11]);
+		const std::int16_t GyroYawMinus = GetLE16(&Buffer[13]);
+		const std::int16_t GyroRollPlus = GetLE16(&Buffer[15]);
+		const std::int16_t GyroRollMinus = GetLE16(&Buffer[17]);
 		if (DeviceContext->ConnectionType == EDSDeviceConnection::Usb)
 		{
-			GyroPitchPlus = GetLE16(&Buffer[7]);
-			GyroPitchMinus = GetLE16(&Buffer[9]);
-			GyroYawPlus = GetLE16(&Buffer[11]);
-			GyroYawMinus = GetLE16(&Buffer[13]);
-			GyroRollPlus = GetLE16(&Buffer[15]);
-			GyroRollMinus = GetLE16(&Buffer[17]);
 		}
 
 		// const std::int16_t GyroSpeedPlus = GetLE16(&Buffer[19]);
@@ -112,7 +106,6 @@ namespace FGamepadSensors
 		const std::int16_t AccelZPlus = GetLE16(&Buffer[31]);
 		const std::int16_t AccelZMinus = GetLE16(&Buffer[33]);
 
-
 		// Gyro Biases (Cleaned up duplicate code)
 		OutCalibration.GyroBiasX = static_cast<float>(GyroPitchBias);
 		OutCalibration.GyroBiasY = static_cast<float>(GyroYawBias);
@@ -188,8 +181,7 @@ namespace FGamepadSensors
 	                                   DSCoreTypes::DSVector3D& FinalGyro,
 	                                   DSCoreTypes::DSVector3D& FinalAccel)
 	{
-		int Offset = (ConnectionType == EDSDeviceConnection::Bluetooth) ? 10 : 12;
-
+		int Offset = 12;
 		auto RawGyroX = static_cast<std::int16_t>(Buffer[Offset + 0] | (Buffer[Offset + 1] << 8));
 		auto RawGyroY = static_cast<std::int16_t>(Buffer[Offset + 2] | (Buffer[Offset + 3] << 8));
 		auto RawGyroZ = static_cast<std::int16_t>(Buffer[Offset + 4] | (Buffer[Offset + 5] << 8));
