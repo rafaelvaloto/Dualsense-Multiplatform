@@ -100,7 +100,7 @@ The library leverages **policy-based design** to abstract platform-specific deta
 * **🎤 Smart Mute Logic**
     Automatic handling of the microphone mute LED state based on device status.
 * **🎮 Multi-Controller Support**
-    Native support for DualSense (Standard/Edge) and DualShock 4. The model-agnostic architecture is prepared for legacy hardware expansion, such as PS1 and PS2 models.
+    Native support for DualSense (Standard/Edge) and DualShock 4. The model-agnostic architecture is prepared for legacy hardware expansion.
 
 
 
