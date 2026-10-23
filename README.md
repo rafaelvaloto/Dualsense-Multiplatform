@@ -63,7 +63,6 @@
 </p>
 <p align="center">
 	<a href="https://store.steampowered.com/app/4798010/bRun/" title="On Steam"><img src="https://img.shields.io/badge/Steam-536878?style=for-the-badge&logo=steam&logoColor=white" alt="On Steam"></a>    
-	<a href="https://youtu.be/EPY0HWrbz84?si=Vn7sK0LKLFDk92GF" title="Watch YouTube"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=YouTube&logoColor=white" alt="Watch YouTube"></a>
 </p>
 
 </div>
