@@ -16,8 +16,6 @@
 #include "GImplementations/Utils/GamepadTouch.h"
 #include "GImplementations/Utils/GamepadTrigger.h"
 #include <algorithm>
-#include <iomanip>
-#include <iostream>
 
 using namespace FDualSenseTriggerComposer;
 
@@ -118,11 +116,12 @@ bool FDualSenseLibrary::Initialize(const FDeviceContext& Context)
 		DSContext->BufferHapitcs[2] = 0x91;
 		DSContext->BufferHapitcs[3] = 0x07;
 		DSContext->BufferHapitcs[4] = 0xfe;
-		DSContext->BufferHapitcs[5] = 0x40;
+		DSContext->BufferHapitcs[5] = 0x40; // frequency filters  (?)
 		DSContext->BufferHapitcs[6] = 0x40; // ...
 		DSContext->BufferHapitcs[7] = 0x40; // ...
 		DSContext->BufferHapitcs[8] = 0x40; // ...
-		DSContext->BufferHapitcs[9] = 0x40;
+		//DSContext->BufferHapitcs[9] = 0x40; // sync times (?)
+		DSContext->BufferHapitcs[9] = 0b01000000; // sync times (?)
 		return true;
 	}
 
@@ -141,7 +140,8 @@ void FDualSenseLibrary::UpdateInput(float /*Delta*/)
 
 	IPlatformHardware::Get().Read(Context);
 	FInputContext* InputToFill = Context->GetBackBuffer();
-	const size_t Padding = Context->ConnectionType == EDSDeviceConnection::Bluetooth ? 2 : 1;
+	const size_t Padding =
+	    Context->ConnectionType == EDSDeviceConnection::Bluetooth ? 2 : 1;
 
 	using namespace FGamepadInput;
 	DualSenseRaw(&Context->Buffer[Padding], InputToFill);
@@ -183,6 +183,8 @@ void FDualSenseLibrary::DualSenseSettings(std::uint8_t bIsMic, std::uint8_t bIsH
 		return;
 	}
 
+	Context->Output.Feature.SoftRumbleReduce = RumbleReduce;
+	Context->Output.Feature.TriggerSoftnessLevel = TriggerReduce;
 	Context->Output.Audio.MicStatus = bIsMic;
 	Context->Output.Audio.MicVolume = MicVolume;
 	Context->Output.Audio.HeadsetVolume = AudioVolume;
@@ -194,6 +196,32 @@ void FDualSenseLibrary::DualSenseSettings(std::uint8_t bIsMic, std::uint8_t bIsH
 		Context->Output.Audio.Mode = 1;
 	}
 	else if (bIsHeadset == 1 && bIsSpeaker == 1)
+	{
+		Context->Output.Audio.Mode = 2;
+	}
+	Context->Output.Feature.VibrationMode = RumbleMode == 255 ? 0xFF : 0xFC;
+}
+
+void FDualSenseLibrary::DualSenseSettings(std::uint8_t bIsMic, std::uint8_t bIsHeadset, std::uint8_t bIsSpeaker,
+	std::uint8_t MicVolume, std::uint8_t SpeakerVolume, std::uint8_t HeadsetVolume, std::uint8_t RumbleMode,
+	std::uint8_t RumbleReduce, std::uint8_t TriggerReduce)
+{
+	FDeviceContext* Context = GetMutableDeviceContext();
+	if (!Context || !Context->IsConnected)
+	{
+		return;
+	}
+	
+	Context->Output.Feature.SoftRumbleReduce = RumbleReduce;
+	Context->Output.Feature.TriggerSoftnessLevel = TriggerReduce;
+
+	Context->Output.Audio.MicStatus = bIsMic;
+	Context->Output.Audio.MicVolume = MicVolume;
+	Context->Output.Audio.HeadsetVolume = HeadsetVolume;
+	Context->Output.Audio.SpeakerVolume = SpeakerVolume;
+
+	Context->Output.Audio.Mode = 1;
+	if (bIsSpeaker == 1 && SpeakerVolume > 0)
 	{
 		Context->Output.Audio.Mode = 2;
 	}

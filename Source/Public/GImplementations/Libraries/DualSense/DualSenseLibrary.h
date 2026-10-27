@@ -133,6 +133,7 @@ public:
 	 * @param TriggerReduce Adjusts the sensitivity of the adaptive triggers (value range is implementation-specific).
 	 */
 	void DualSenseSettings(std::uint8_t bIsMic, std::uint8_t bIsHeadset, std::uint8_t bIsSpeaker, std::uint8_t MicVolume, std::uint8_t AudioVolume, std::uint8_t RumbleMode, std::uint8_t RumbleReduce, std::uint8_t TriggerReduce) override;
+	void DualSenseSettings(std::uint8_t bIsMic, std::uint8_t bIsHeadset, std::uint8_t bIsSpeaker, std::uint8_t MicVolume, std::uint8_t SpeakerVolume, std::uint8_t HeadsetVolume, std::uint8_t RumbleMode, std::uint8_t RumbleReduce, std::uint8_t TriggerReduce) override;
 
 	/**
 	 * @brief Updates the output state of the gamepad.

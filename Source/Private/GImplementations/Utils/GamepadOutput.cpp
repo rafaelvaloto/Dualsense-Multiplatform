@@ -119,7 +119,7 @@ void FGamepadOutput::OutputDualSense(FDeviceContext* DeviceContext)
 			SetTriggerEffects(&Output[10], HidOut->RightTrigger);
 			SetTriggerEffects(&Output[21], HidOut->LeftTrigger);
 		}
-
+		
 		if (DeviceContext->ConnectionType == EDSDeviceConnection::Bluetooth)
 		{
 			const auto CrcChecksum = GCoreUtils::CR32::Compute(MutableBuffer, 74);

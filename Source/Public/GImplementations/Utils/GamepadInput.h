@@ -164,6 +164,8 @@ namespace FGamepadInput
 		    HIDInput[0x05] & DSCoreTypes::InputMasks::Shoulder::L2;
 		const bool bRightTriggerThreshold =
 		    HIDInput[0x05] & DSCoreTypes::InputMasks::Shoulder::R2;
+		
+		
 
 		// Triggers Analog 1D
 		const float TriggerL = HIDInput[0x07] / 256.0f;
@@ -229,9 +231,10 @@ namespace FGamepadInput
 		    HIDInput[0x05] & DSCoreTypes::InputMasks::Stick::L3;
 		const bool PushRightStick =
 		    HIDInput[0x05] & DSCoreTypes::InputMasks::Stick::R3;
-
+		
 		const bool Start = HIDInput[0x05] & DSCoreTypes::InputMasks::Menu::Options;
 		const bool Select = HIDInput[0x05] & DSCoreTypes::InputMasks::Menu::Share;
+		const bool Playstation = HIDInput[0x06] & DSCoreTypes::InputMasks::Menu::PS;
 
 		auto ApplyDeadZone = [](float Value, float Threshold) -> float {
 			if (std::abs(Value) < Threshold)
@@ -281,6 +284,7 @@ namespace FGamepadInput
 		Input->bRightStick = PushRightStick;
 		Input->bStart = Start;
 		Input->bShare = Select;
+		Input->bPSButton = Playstation;
 		Input->bLeftTriggerThreshold = bLeftTriggerThreshold;
 		Input->bRightTriggerThreshold = bRightTriggerThreshold;
 	}

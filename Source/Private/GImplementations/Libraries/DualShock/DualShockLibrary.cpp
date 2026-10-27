@@ -10,7 +10,6 @@
 #include "GImplementations/Utils/GamepadOutput.h"
 #include "GImplementations/Utils/GamepadSensors.h"
 #include "GImplementations/Utils/GamepadTouch.h"
-#include <iomanip>
 
 bool FDualShockLibrary::Initialize(const FDeviceContext& Context)
 {
